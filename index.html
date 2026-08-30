@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة المحاسب - إدارة المشتركين</title>
-    <!-- Tailwind CSS (No Blue) -->
+    <title>لوحة المحاسب - فرع جدة</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,11 +12,10 @@
                 extend: {
                     colors: {
                         brand: {
+                            blue: '#2563eb',
                             emerald: '#059669',
-                            emeraldHover: '#047857',
-                            bgDark: '#0f172a',
-                            cardBg: '#1e293b',
-                            cardLight: '#334155'
+                            purple: '#7c3aed',
+                            amber: '#d97706'
                         }
                     }
                 }
@@ -24,22 +23,22 @@
         }
     </script>
 </head>
-<body class="bg-slate-900 font-sans text-slate-100 min-h-screen">
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen">
 
     <!-- 🔑 شاشة تسجيل الدخول -->
-    <div id="loginSection" class="min-h-screen flex items-center justify-center bg-slate-950 px-4">
-        <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl max-w-md w-full border border-slate-700">
-            <h2 class="text-2xl font-bold text-center mb-6 text-emerald-400">تسجيل دخول المحاسب</h2>
+    <div id="loginSection" class="min-h-screen flex items-center justify-center bg-slate-100 px-4">
+        <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border border-slate-200">
+            <h2 class="text-2xl font-bold text-center mb-6 text-indigo-700">تسجيل دخول محاسب - فرع جدة</h2>
             <form id="loginForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium mb-1 text-slate-300">البريد الإلكتروني</label>
-                    <input type="email" id="loginEmail" required class="w-full p-3 bg-slate-900 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <label class="block text-sm font-semibold mb-1 text-slate-700">البريد الإلكتروني</label>
+                    <input type="email" id="loginEmail" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-1 text-slate-300">رمز الدخول (كلمة السر)</label>
-                    <input type="password" id="loginPassword" required class="w-full p-3 bg-slate-900 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <label class="block text-sm font-semibold mb-1 text-slate-700">رمز الدخول (كلمة السر)</label>
+                    <input type="password" id="loginPassword" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 text-white py-3 rounded-lg font-bold hover:bg-emerald-700 transition">دخول</button>
+                <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">دخول</button>
             </form>
         </div>
     </div>
@@ -48,208 +47,246 @@
     <div id="dashboardSection" class="hidden pb-12">
         
         <!-- 🌟 شريط الحقوق العلوي -->
-        <div class="bg-emerald-800 text-slate-100 text-center py-2 text-sm font-semibold tracking-wide border-b border-emerald-700">
+        <div class="bg-gradient-to-r from-indigo-700 to-purple-700 text-white text-center py-2.5 text-sm font-semibold tracking-wide shadow-sm">
             تصميم وتطوير أحمد السعداوي
         </div>
 
         <!-- الهيدر الرئيسي -->
-        <header class="bg-slate-800 text-white p-4 shadow-md flex justify-between items-center px-6 border-b border-slate-700">
-            <h1 class="text-xl font-bold text-emerald-400">نظام إدارة الفرع - المحاسب</h1>
-            <button id="logoutBtn" class="bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700 text-sm font-semibold transition">تسجيل الخروج</button>
+        <header class="bg-white text-slate-800 p-4 shadow-sm flex justify-between items-center px-4 md:px-8 border-b border-slate-200">
+            <h1 class="text-xl md:text-2xl font-black text-indigo-700">نظام إدارة فرع جدة</h1>
+            <button id="logoutBtn" class="bg-rose-50 text-rose-600 border border-rose-200 px-4 py-2 rounded-xl hover:bg-rose-100 text-sm font-bold transition">تسجيل الخروج</button>
         </header>
 
         <div class="max-w-7xl mx-auto mt-6 px-4 space-y-6">
 
-            <!-- 💰 1. خيار إجمالي الإيرادات في رأس الصفحة -->
-            <div id="revenueCard" class="bg-gradient-to-r from-emerald-900 to-slate-800 border border-emerald-600/50 p-6 rounded-2xl shadow-xl cursor-pointer transition transform hover:scale-[1.01] flex justify-between items-center">
+            <!-- 💰 1. خيار إجمالي الإيرادات -->
+            <div id="revenueCard" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-6 rounded-2xl shadow-lg cursor-pointer transition transform hover:scale-[1.01] flex justify-between items-center">
                 <div>
-                    <p class="text-emerald-300 text-sm font-medium">إجمالي إيرادات الشهر الحالي (اضغط للتفاصيل)</p>
-                    <h2 id="totalRevenueText" class="text-4xl font-extrabold mt-1 text-white">0 ر.س</h2>
+                    <p class="text-emerald-100 text-sm font-medium">إجمالي إيرادات الشهر الحالي (اضغط للتفاصيل)</p>
+                    <h2 id="totalRevenueText" class="text-3xl md:text-4xl font-black mt-1">0 ر.س</h2>
                 </div>
-                <div class="bg-emerald-600/20 p-4 rounded-xl border border-emerald-500/30 text-emerald-400">
-                    <span class="text-2xl">💵</span>
+                <div class="bg-white/20 p-4 rounded-2xl border border-white/30 text-white">
+                    <span class="text-3xl">💵</span>
                 </div>
             </div>
 
-            <!-- 📈 2. خانات الإحصائيات المعززة بأزرار العرض -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- 📈 2. خانات الإحصائيات -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <!-- إجمالي المشتركين -->
-                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-lg flex flex-col justify-between">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
-                        <p class="text-slate-400 text-sm">إجمالي المشتركين المسجلين</p>
-                        <h3 id="statTotal" class="text-3xl font-bold mt-2 text-white">0</h3>
+                        <p class="text-slate-500 text-sm font-bold">إجمالي المشتركين المسجلين</p>
+                        <h3 id="statTotal" class="text-3xl font-black mt-2 text-indigo-600">0</h3>
                     </div>
-                    <button onclick="openCategoryModal('all')" class="mt-4 bg-slate-700 hover:bg-slate-600 text-slate-200 py-2 rounded-lg text-sm font-medium w-full transition">
+                    <button onclick="openCategoryModal('all')" class="mt-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2.5 rounded-xl text-sm w-full transition border border-indigo-200">
                         👁️ عرض القائمة
                     </button>
                 </div>
 
                 <!-- المستمرة -->
-                <div class="bg-slate-800 p-6 rounded-2xl border border-emerald-800/60 shadow-lg flex flex-col justify-between">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
-                        <p class="text-emerald-400 text-sm">الاشتراكات المستمرة (النشطة)</p>
-                        <h3 id="statActive" class="text-3xl font-bold mt-2 text-emerald-400">0</h3>
+                        <p class="text-emerald-600 text-sm font-bold">الاشتراكات المستمرة (النشطة)</p>
+                        <h3 id="statActive" class="text-3xl font-black mt-2 text-emerald-600">0</h3>
                     </div>
-                    <button onclick="openCategoryModal('active')" class="mt-4 bg-emerald-700/40 hover:bg-emerald-700/60 text-emerald-200 py-2 rounded-lg text-sm font-medium w-full border border-emerald-600/40 transition">
-                        👁️ عرض المشتركين النشطين
+                    <button onclick="openCategoryModal('active')" class="mt-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold py-2.5 rounded-xl text-sm w-full transition border border-emerald-200">
+                        👁️ عرض النشطين
                     </button>
                 </div>
 
-                <!-- التي ستنتهي / منتهية -->
-                <div class="bg-slate-800 p-6 rounded-2xl border border-amber-800/60 shadow-lg flex flex-col justify-between">
+                <!-- المنتهية -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
-                        <p class="text-amber-400 text-sm">الاشتراكات المنتهية / تنتهي قريباً</p>
-                        <h3 id="statExpiring" class="text-3xl font-bold mt-2 text-amber-400">0</h3>
+                        <p class="text-amber-600 text-sm font-bold">الاشتراكات المنتهية / تنتهي قريباً</p>
+                        <h3 id="statExpiring" class="text-3xl font-black mt-2 text-amber-600">0</h3>
                     </div>
-                    <button onclick="openCategoryModal('expiring')" class="mt-4 bg-amber-700/30 hover:bg-amber-700/50 text-amber-200 py-2 rounded-lg text-sm font-medium w-full border border-amber-600/40 transition">
-                        👁️ عرض القائمة المنتهية
+                    <button onclick="openCategoryModal('expiring')" class="mt-4 bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold py-2.5 rounded-xl text-sm w-full transition border border-amber-200">
+                        👁️ عرض المنتهية
                     </button>
                 </div>
             </div>
 
             <!-- 🔘 أدوات التحكم: الإضافة والبحث المباشر -->
-            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
-                <button id="openAddModalBtn" class="w-full md:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow transition flex items-center justify-center gap-2">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                <button id="openAddModalBtn" class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition flex items-center justify-center gap-2">
                     <span>➕</span> إضافة مشترك جديد
                 </button>
                 <div class="w-full md:w-1/2">
-                    <input type="text" id="searchInput" placeholder="🔍 ابحث عن مشترك بالاسم أو الرقم لتفتح صفحته..." class="w-full p-3 bg-slate-900 border border-slate-700 text-white rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    <input type="text" id="searchInput" placeholder="🔍 ابحث بالاسم، رقم الهاتف، أو كود المشترك (3 أرقام)..." class="w-full p-3.5 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
                 </div>
             </div>
 
-            <!-- 🔍 نتائج البحث السريع (بديل الجدول الرئيسي) -->
-            <div id="searchResultsSection" class="hidden bg-slate-800 p-6 rounded-2xl border border-slate-700">
-                <h3 class="text-lg font-bold mb-4 text-emerald-400">نتائج البحث:</h3>
+            <!-- 🔍 نتائج البحث السريع -->
+            <div id="searchResultsSection" class="hidden bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 class="text-lg font-bold mb-4 text-indigo-700">نتائج البحث:</h3>
                 <div id="searchResultsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
 
         </div>
     </div>
 
-    <!-- 🪟 1. نافذة تفاصيل الإيرادات الشاملة -->
-    <div id="revenueModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-700 pb-3">
-                <h3 class="text-xl font-bold text-emerald-400">تفاصيل الإيرادات المقبوضة</h3>
-                <button onclick="closeModal('revenueModal')" class="text-slate-400 hover:text-white">✕</button>
+    <!-- 🪟 1. نافذة تفاصيل الإيرادات -->
+    <div id="revenueModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-xl font-bold text-indigo-700">تفاصيل إيرادات فرع جدة</h3>
+                <button onclick="closeModal('revenueModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold">✕</button>
             </div>
             
             <div class="flex items-center gap-4">
-                <label class="text-sm">اختر الشهر:</label>
-                <input type="month" id="revenueMonthPicker" class="bg-slate-900 border border-slate-700 text-white p-2 rounded-lg outline-none">
+                <label class="text-sm font-bold text-slate-700">اختر الشهر:</label>
+                <input type="month" id="revenueMonthPicker" class="bg-slate-50 border border-slate-300 text-slate-800 p-2.5 rounded-xl outline-none font-semibold">
             </div>
 
-            <div class="max-h-80 overflow-y-auto space-y-2" id="revenueListContainer">
-                <!-- تحمّل السجلات هنا -->
-            </div>
+            <div class="max-h-80 overflow-y-auto space-y-2" id="revenueListContainer"></div>
         </div>
     </div>
 
-    <!-- 🪟 2. نافذة عرض المشتركين بحسب الفئة -->
-    <div id="categoryModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-3xl w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-700 pb-3">
-                <h3 id="categoryModalTitle" class="text-xl font-bold text-emerald-400">قائمة المشتركين</h3>
-                <button onclick="closeModal('categoryModal')" class="text-slate-400 hover:text-white">✕</button>
+    <!-- 🪟 2. نافذة عرض الفئات -->
+    <div id="categoryModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-3xl w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 id="categoryModalTitle" class="text-xl font-bold text-indigo-700">قائمة المشتركين</h3>
+                <button onclick="closeModal('categoryModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold">✕</button>
             </div>
             <div class="max-h-96 overflow-y-auto space-y-3" id="categoryListContainer"></div>
         </div>
     </div>
 
-    <!-- 🪟 3. النافذة الخاصة بالمشترك (بروفايل المشترك الكامل) -->
-    <div id="profileModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-6">
-            <div class="flex justify-between items-start border-b border-slate-700 pb-3">
+    <!-- 🪟 3. النافذة الخاصة بالمشترك (ملف المشترك) -->
+    <div id="profileModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-5">
+            <div class="flex justify-between items-start border-b border-slate-100 pb-3">
                 <div>
-                    <h3 id="profName" class="text-2xl font-bold text-white"></h3>
-                    <p id="profPhone" class="text-sm text-slate-400 mt-1"></p>
+                    <div class="flex items-center gap-2">
+                        <h3 id="profName" class="text-2xl font-black text-slate-800"></h3>
+                        <span id="profCode" class="bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-lg text-xs font-black border border-indigo-200">#---</span>
+                    </div>
+                    <p id="profPhone" class="text-sm text-slate-500 font-medium mt-1"></p>
                 </div>
-                <button onclick="closeModal('profileModal')" class="text-slate-400 hover:text-white">✕</button>
+                <button onclick="closeModal('profileModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold">✕</button>
             </div>
 
-            <div class="space-y-3 text-sm bg-slate-900 p-4 rounded-xl border border-slate-700">
+            <div class="space-y-3 text-sm bg-slate-50 p-4 rounded-xl border border-slate-200">
                 <div class="flex justify-between">
-                    <span class="text-slate-400">قيمة الاشتراك الحالي:</span>
-                    <span id="profPrice" class="font-bold text-emerald-400"></span>
+                    <span class="text-slate-500 font-medium">قيمة الاشتراك:</span>
+                    <span id="profPrice" class="font-bold text-emerald-600"></span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-slate-400">تاريخ بداية الاشتراك:</span>
-                    <span id="profStart" class="text-white"></span>
+                    <span class="text-slate-500 font-medium">تاريخ البداية:</span>
+                    <span id="profStart" class="font-bold text-slate-700"></span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-slate-400">تاريخ انتهاء الاشتراك:</span>
-                    <span id="profEnd" class="text-white"></span>
+                    <span class="text-slate-500 font-medium">تاريخ الانتهاء:</span>
+                    <span id="profEnd" class="font-bold text-slate-700"></span>
                 </div>
-                <div class="flex justify-between items-center pt-2 border-t border-slate-800">
-                    <span class="text-slate-400">الحالة:</span>
+                <div class="flex justify-between items-center pt-2 border-t border-slate-200">
+                    <span class="text-slate-500 font-medium">الحالة:</span>
                     <span id="profStatus"></span>
+                </div>
+                <div class="pt-2 border-t border-slate-200">
+                    <span class="text-slate-500 font-medium block mb-1">الملاحظات:</span>
+                    <p id="profNotes" class="text-slate-700 font-normal bg-white p-2.5 rounded-lg border border-slate-200 min-h-[40px] whitespace-pre-wrap"></p>
                 </div>
             </div>
 
             <div class="grid grid-cols-3 gap-2">
-                <button id="profEditBtn" class="bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg font-semibold text-sm">تعديل</button>
-                <button id="profRenewBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg font-semibold text-sm">تجديد</button>
-                <button id="profDeleteBtn" class="bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold text-sm">حذف</button>
+                <button id="profEditBtn" class="bg-amber-500 hover:bg-amber-600 text-white py-2.5 rounded-xl font-bold text-sm shadow">تعديل</button>
+                <button id="profRenewBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold text-sm shadow">تجديد</button>
+                <button id="profDeleteBtn" class="bg-rose-600 hover:bg-rose-700 text-white py-2.5 rounded-xl font-bold text-sm shadow">حذف</button>
             </div>
         </div>
     </div>
 
-    <!-- 🪟 4. نافذة الإضافة/التعديل (تم تمكين تعديل التواريخ) -->
-    <div id="subscriberModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
-            <h3 id="modalTitle" class="text-xl font-bold mb-4 text-emerald-400">إضافة مشترك جديد</h3>
+    <!-- 🪟 4. نافذة الإضافة/التعديل -->
+    <div id="subscriberModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <h3 id="modalTitle" class="text-xl font-bold mb-4 text-indigo-700">إضافة مشترك جديد - فرع جدة</h3>
             <form id="subscriberForm" class="space-y-4">
                 <input type="hidden" id="editDocId">
+                <input type="hidden" id="subCode">
+                
                 <div>
-                    <label class="block text-sm font-medium mb-1">اسم المشترك</label>
-                    <input type="text" id="subName" required class="w-full p-3 bg-slate-900 border border-slate-700 text-white rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
+                    <label class="block text-sm font-bold mb-1 text-slate-700">اسم المشترك</label>
+                    <input type="text" id="subName" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-1">رقم ولي الأمر</label>
-                    <input type="tel" id="subPhone" required class="w-full p-3 bg-slate-900 border border-slate-700 text-white rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
+                    <label class="block text-sm font-bold mb-1 text-slate-700">رقم ولي الأمر</label>
+                    <input type="tel" id="subPhone" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-1">قيمة الاشتراك (ر.س)</label>
-                    <input type="number" id="subPrice" required class="w-full p-3 bg-slate-900 border border-slate-700 text-white rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
+                    <label class="block text-sm font-bold mb-1 text-slate-700">قيمة الاشتراك (ر.س)</label>
+                    <input type="number" id="subPrice" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">تاريخ بداية الاشتراك</label>
-                    <input type="date" id="subStartDate" required class="w-full p-3 bg-slate-900 border border-slate-700 text-white rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-bold mb-1 text-slate-700">مدة الاشتراك</label>
+                        <select id="subDuration" class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 font-semibold">
+                            <option value="1">1 شهر</option>
+                            <option value="2">2 شهر</option>
+                            <option value="3">3 شهر</option>
+                            <option value="4">4 شهر</option>
+                            <option value="5">5 شهر</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-1 text-slate-700">تاريخ البداية</label>
+                        <input type="date" id="subStartDate" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
                 </div>
+
                 <div>
-                    <label class="block text-sm font-medium mb-1">تاريخ الانتهاء</label>
-                    <input type="date" id="subEndDate" required class="w-full p-3 bg-slate-900 border border-slate-700 text-white rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
+                    <label class="block text-sm font-bold mb-1 text-slate-700">تاريخ الانتهاء (تلقائي)</label>
+                    <input type="date" id="subEndDate" required readonly class="w-full p-3 bg-slate-100 border border-slate-300 text-slate-600 rounded-xl outline-none font-bold">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-700">ملاحظات</label>
+                    <textarea id="subNotes" rows="2" placeholder="أضف أي ملاحظات خاصة بالمشترك هنا..." class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
                 </div>
 
                 <div class="flex justify-end gap-3 mt-6">
-                    <button type="button" onclick="closeModal('subscriberModal')" class="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 rounded-lg">إلغاء</button>
-                    <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg">حفظ البيانات</button>
+                    <button type="button" onclick="closeModal('subscriberModal')" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl font-bold">إلغاء</button>
+                    <button type="submit" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow">حفظ البيانات</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- 🪟 5. نافذة التجديد القابلة للتخصيص -->
-    <div id="renewModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <h3 class="text-xl font-bold text-emerald-400">تجديد الاشتراك للمشترك</h3>
+    <!-- 🪟 5. نافذة التجديد -->
+    <div id="renewModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <h3 class="text-xl font-bold text-indigo-700">تجديد الاشتراك للمشترك</h3>
             <form id="renewForm" class="space-y-4">
                 <input type="hidden" id="renewDocId">
                 <div>
-                    <label class="block text-sm font-medium mb-1">قيمة التجديد (ر.س)</label>
-                    <input type="number" id="renewPrice" required class="w-full p-3 bg-slate-900 border border-slate-700 text-white rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
+                    <label class="block text-sm font-bold mb-1 text-slate-700">قيمة التجديد (ر.س)</label>
+                    <input type="number" id="renewPrice" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-bold mb-1 text-slate-700">مدة التجديد</label>
+                        <select id="renewDuration" class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none font-semibold">
+                            <option value="1">1 شهر</option>
+                            <option value="2">2 شهر</option>
+                            <option value="3">3 شهر</option>
+                            <option value="4">4 شهر</option>
+                            <option value="5">5 شهر</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-1 text-slate-700">تاريخ البداية</label>
+                        <input type="date" id="renewStartDate" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none">
+                    </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-1">تاريخ بداية التجديد</label>
-                    <input type="date" id="renewStartDate" required class="w-full p-3 bg-slate-900 border border-slate-700 text-white rounded-lg outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">تاريخ نهاية التجديد</label>
-                    <input type="date" id="renewEndDate" required class="w-full p-3 bg-slate-900 border border-slate-700 text-white rounded-lg outline-none">
+                    <label class="block text-sm font-bold mb-1 text-slate-700">تاريخ نهاية التجديد</label>
+                    <input type="date" id="renewEndDate" required readonly class="w-full p-3 bg-slate-100 border border-slate-300 text-slate-600 rounded-xl outline-none font-bold">
                 </div>
                 <div class="flex justify-end gap-3 pt-4">
-                    <button type="button" onclick="closeModal('renewModal')" class="px-5 py-2.5 bg-slate-700 rounded-lg">إلغاء</button>
-                    <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg">تأكيد التجديد</button>
+                    <button type="button" onclick="closeModal('renewModal')" class="px-5 py-2.5 bg-slate-200 text-slate-700 font-bold rounded-xl">إلغاء</button>
+                    <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow">تأكيد التجديد</button>
                 </div>
             </form>
         </div>
@@ -276,9 +313,55 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        const BRANCH_COLLECTION = "branch1_subscribers";
         let allSubscribers = [];
 
-        // تسجيل الدخول
+        // حساب تاريخ النهاية تلقائياً
+        function calculateEndDate(startDateStr, monthsCount) {
+            if (!startDateStr) return '';
+            const d = new Date(startDateStr);
+            d.setMonth(d.getMonth() + parseInt(monthsCount));
+            return d.toISOString().split('T')[0];
+        }
+
+        // توليد كود عشوائي فريد من 3 أرقام
+        function generateUniqueCode() {
+            const existingCodes = allSubscribers.map(s => s.code).filter(Boolean);
+            let newCode;
+            do {
+                newCode = Math.floor(100 + Math.random() * 900).toString();
+            } while (existingCodes.includes(newCode));
+            return newCode;
+        }
+
+        document.getElementById('subStartDate').addEventListener('change', () => {
+            document.getElementById('subEndDate').value = calculateEndDate(
+                document.getElementById('subStartDate').value,
+                document.getElementById('subDuration').value
+            );
+        });
+
+        document.getElementById('subDuration').addEventListener('change', () => {
+            document.getElementById('subEndDate').value = calculateEndDate(
+                document.getElementById('subStartDate').value,
+                document.getElementById('subDuration').value
+            );
+        });
+
+        document.getElementById('renewStartDate').addEventListener('change', () => {
+            document.getElementById('renewEndDate').value = calculateEndDate(
+                document.getElementById('renewStartDate').value,
+                document.getElementById('renewDuration').value
+            );
+        });
+
+        document.getElementById('renewDuration').addEventListener('change', () => {
+            document.getElementById('renewEndDate').value = calculateEndDate(
+                document.getElementById('renewStartDate').value,
+                document.getElementById('renewDuration').value
+            );
+        });
+
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
@@ -301,13 +384,11 @@
             }
         });
 
-        // إغلاق أي نافذة
         window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
 
-        // جلب البيانات من الداتا بيز
         async function loadSubscribers() {
             try {
-                const q = query(collection(db, "subscribers"), orderBy("createdAt", "desc"));
+                const q = query(collection(db, BRANCH_COLLECTION), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
                 allSubscribers = [];
                 querySnapshot.forEach((doc) => {
@@ -319,10 +400,9 @@
             }
         }
 
-        // تحديث كروت الإحصائيات والإيراد بالريال السعودي
         function updateStatsAndRevenue() {
             const today = new Date().toISOString().split('T')[0];
-            const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
+            const currentMonth = new Date().toISOString().slice(0, 7);
 
             let active = 0, expiring = 0, monthRevenue = 0;
 
@@ -341,7 +421,6 @@
             document.getElementById('totalRevenueText').innerText = monthRevenue.toLocaleString() + " ر.س";
         }
 
-        // 1. فتح تفاصيل الإيرادات حسب الشهر
         document.getElementById('revenueCard').addEventListener('click', () => {
             const picker = document.getElementById('revenueMonthPicker');
             picker.value = new Date().toISOString().slice(0, 7);
@@ -359,24 +438,23 @@
             const filtered = allSubscribers.filter(s => s.startDate && s.startDate.startsWith(monthStr));
 
             if (filtered.length === 0) {
-                container.innerHTML = `<p class="text-center text-slate-500 py-4">لا توجد عمليات مقبوضة لهذا الشهر</p>`;
+                container.innerHTML = `<p class="text-center text-slate-400 py-4">لا توجد عمليات مقبوضة لهذا الشهر</p>`;
                 return;
             }
 
             filtered.forEach(sub => {
                 container.innerHTML += `
-                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-700 flex justify-between items-center text-sm">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex justify-between items-center text-sm">
                         <div>
-                            <p class="font-bold text-white">${sub.name}</p>
-                            <p class="text-xs text-slate-400">تاريخ الاشتراك: ${sub.startDate}</p>
+                            <p class="font-bold text-slate-800">${sub.name} <span class="text-xs text-indigo-600 font-bold">#${sub.code || '---'}</span></p>
+                            <p class="text-xs text-slate-500">تاريخ الاشتراك: ${sub.startDate}</p>
                         </div>
-                        <span class="font-bold text-emerald-400">${sub.price} ر.س</span>
+                        <span class="font-black text-emerald-600">${sub.price} ر.س</span>
                     </div>
                 `;
             });
         }
 
-        // 2. فتح نافذة الفئات الثلاث للإحصاءات
         window.openCategoryModal = (type) => {
             const title = document.getElementById('categoryModalTitle');
             const container = document.getElementById('categoryListContainer');
@@ -384,23 +462,23 @@
             const today = new Date().toISOString().split('T')[0];
 
             let list = [];
-            if (type === 'all') { title.innerText = "جميع المشتركين المسجلين"; list = allSubscribers; }
-            else if (type === 'active') { title.innerText = "المشتركين النشطين (المستمرة)"; list = allSubscribers.filter(s => s.endDate >= today); }
+            if (type === 'all') { title.innerText = "جميع المشتركين المسجلين - فرع جدة"; list = allSubscribers; }
+            else if (type === 'active') { title.innerText = "المشتركين النشطين"; list = allSubscribers.filter(s => s.endDate >= today); }
             else if (type === 'expiring') { title.innerText = "المشتركين المنتهين / تنتهي قريباً"; list = allSubscribers.filter(s => s.endDate < today); }
 
             list.forEach(sub => {
                 const isExp = sub.endDate < today;
                 container.innerHTML += `
-                    <div onclick="openProfile('${sub.id}')" class="bg-slate-900 hover:bg-slate-700/50 p-4 rounded-xl border border-slate-700 flex justify-between items-center cursor-pointer transition">
+                    <div onclick="openProfile('${sub.id}')" class="bg-slate-50 hover:bg-indigo-50/60 p-4 rounded-xl border border-slate-200 flex justify-between items-center cursor-pointer transition">
                         <div>
-                            <h4 class="font-bold text-white">${sub.name}</h4>
-                            <p class="text-xs text-slate-400">${sub.phone} | ينتهي: ${sub.endDate}</p>
+                            <h4 class="font-bold text-slate-800">${sub.name} <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-md font-black">#${sub.code || '---'}</span></h4>
+                            <p class="text-xs text-slate-500 mt-1">📱 ${sub.phone} | ينتهي: ${sub.endDate}</p>
                         </div>
                         <div class="text-left">
-                            <span class="px-2.5 py-1 text-xs rounded-full font-bold ${isExp ? 'bg-red-900/50 text-red-300' : 'bg-emerald-900/50 text-emerald-300'}">
+                            <span class="px-2.5 py-1 text-xs rounded-full font-bold ${isExp ? 'bg-rose-100 text-rose-600' : 'bg-emerald-100 text-emerald-600'}">
                                 ${isExp ? 'منتهي' : 'نشط'}
                             </span>
-                            <p class="text-xs font-bold text-emerald-400 mt-1">${sub.price} ر.س</p>
+                            <p class="text-xs font-black text-indigo-600 mt-1">${sub.price} ر.س</p>
                         </div>
                     </div>
                 `;
@@ -408,7 +486,6 @@
             document.getElementById('categoryModal').classList.remove('hidden');
         };
 
-        // 3. فتح الصفحة الفرعية (البروفايل) الخاصة بالمشترك
         window.openProfile = (id) => {
             closeModal('categoryModal');
             document.getElementById('searchResultsSection').classList.add('hidden');
@@ -419,12 +496,15 @@
             const isExp = sub.endDate < today;
 
             document.getElementById('profName').innerText = sub.name;
+            document.getElementById('profCode').innerText = "#" + (sub.code || '---');
             document.getElementById('profPhone').innerText = "📱 " + sub.phone;
             document.getElementById('profPrice').innerText = sub.price + " ر.س";
             document.getElementById('profStart').innerText = sub.startDate;
             document.getElementById('profEnd').innerText = sub.endDate;
+            document.getElementById('profNotes').innerText = sub.notes || 'لا توجد ملاحظات مدونة';
+            
             document.getElementById('profStatus').innerHTML = `
-                <span class="px-3 py-1 text-xs rounded-full font-bold ${isExp ? 'bg-red-900/50 text-red-300' : 'bg-emerald-900/50 text-emerald-300'}">
+                <span class="px-3 py-1 text-xs rounded-full font-bold ${isExp ? 'bg-rose-100 text-rose-600' : 'bg-emerald-100 text-emerald-600'}">
                     ${isExp ? 'منتهي' : 'نشط'}
                 </span>
             `;
@@ -436,19 +516,17 @@
             document.getElementById('profileModal').classList.remove('hidden');
         };
 
-        // 4. إضافة مشترك جديد وتعديل التواريخ بحرية
         document.getElementById('openAddModalBtn').addEventListener('click', () => {
-            document.getElementById('modalTitle').innerText = "إضافة مشترك جديد";
+            document.getElementById('modalTitle').innerText = "إضافة مشترك جديد - فرع جدة";
             document.getElementById('editDocId').value = "";
             document.getElementById('subscriberForm').reset();
             
-            const today = new Date();
-            const nextMonth = new Date(today);
-            nextMonth.setMonth(nextMonth.getMonth() + 1);
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('subStartDate').value = todayStr;
+            document.getElementById('subDuration').value = "1";
+            document.getElementById('subEndDate').value = calculateEndDate(todayStr, 1);
+            document.getElementById('subCode').value = generateUniqueCode();
 
-            document.getElementById('subStartDate').value = today.toISOString().split('T')[0];
-            document.getElementById('subEndDate').value = nextMonth.toISOString().split('T')[0];
-            
             document.getElementById('subscriberModal').classList.remove('hidden');
         });
 
@@ -461,15 +539,18 @@
                 price: parseFloat(document.getElementById('subPrice').value),
                 startDate: document.getElementById('subStartDate').value,
                 endDate: document.getElementById('subEndDate').value,
+                duration: document.getElementById('subDuration').value,
+                notes: document.getElementById('subNotes').value,
                 updatedAt: new Date()
             };
 
             try {
                 if (editId) {
-                    await updateDoc(doc(db, "subscribers", editId), data);
+                    await updateDoc(doc(db, BRANCH_COLLECTION, editId), data);
                 } else {
+                    data.code = document.getElementById('subCode').value || generateUniqueCode();
                     data.createdAt = new Date();
-                    await addDoc(collection(db, "subscribers"), data);
+                    await addDoc(collection(db, BRANCH_COLLECTION), data);
                 }
                 closeModal('subscriberModal');
                 loadSubscribers();
@@ -478,7 +559,6 @@
             }
         });
 
-        // تعديل بيانات مشترك
         window.editSubscriber = (id) => {
             const sub = allSubscribers.find(s => s.id === id);
             if (!sub) return;
@@ -488,26 +568,26 @@
             document.getElementById('subName').value = sub.name;
             document.getElementById('subPhone').value = sub.phone;
             document.getElementById('subPrice').value = sub.price;
+            document.getElementById('subDuration').value = sub.duration || "1";
             document.getElementById('subStartDate').value = sub.startDate;
             document.getElementById('subEndDate').value = sub.endDate;
+            document.getElementById('subNotes').value = sub.notes || "";
+            document.getElementById('subCode').value = sub.code || "";
 
             document.getElementById('subscriberModal').classList.remove('hidden');
         };
 
-        // 5. التجديد المخصص (مع اختيار التاريخ بنفسه)
         window.openRenewModal = (id) => {
             const sub = allSubscribers.find(s => s.id === id);
             if (!sub) return;
 
             document.getElementById('renewDocId').value = id;
             document.getElementById('renewPrice').value = sub.price;
-
-            const today = new Date();
-            const nextMonth = new Date(today);
-            nextMonth.setMonth(nextMonth.getMonth() + 1);
-
-            document.getElementById('renewStartDate').value = today.toISOString().split('T')[0];
-            document.getElementById('renewEndDate').value = nextMonth.toISOString().split('T')[0];
+            
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('renewStartDate').value = todayStr;
+            document.getElementById('renewDuration').value = "1";
+            document.getElementById('renewEndDate').value = calculateEndDate(todayStr, 1);
 
             document.getElementById('renewModal').classList.remove('hidden');
         };
@@ -518,11 +598,12 @@
             const data = {
                 price: parseFloat(document.getElementById('renewPrice').value),
                 startDate: document.getElementById('renewStartDate').value,
-                endDate: document.getElementById('renewEndDate').value
+                endDate: document.getElementById('renewEndDate').value,
+                duration: document.getElementById('renewDuration').value
             };
 
             try {
-                await updateDoc(doc(db, "subscribers", id), data);
+                await updateDoc(doc(db, BRANCH_COLLECTION, id), data);
                 closeModal('renewModal');
                 loadSubscribers();
             } catch (err) {
@@ -530,11 +611,10 @@
             }
         });
 
-        // حذف المشترك
         window.deleteSubscriber = async (id) => {
             if (confirm("هل أنت تأكد من حذف هذا المشترك نهائياً؟")) {
                 try {
-                    await deleteDoc(doc(db, "subscribers", id));
+                    await deleteDoc(doc(db, BRANCH_COLLECTION, id));
                     closeModal('profileModal');
                     loadSubscribers();
                 } catch (err) {
@@ -543,7 +623,6 @@
             }
         };
 
-        // البحث المباشر السريع
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const queryText = e.target.value.toLowerCase().trim();
             const resultsSection = document.getElementById('searchResultsSection');
@@ -555,7 +634,9 @@
             }
 
             const filtered = allSubscribers.filter(sub => 
-                sub.name.toLowerCase().includes(queryText) || sub.phone.includes(queryText)
+                sub.name.toLowerCase().includes(queryText) || 
+                sub.phone.includes(queryText) ||
+                (sub.code && sub.code.includes(queryText))
             );
 
             resultsList.innerHTML = '';
@@ -564,12 +645,12 @@
             } else {
                 filtered.forEach(sub => {
                     resultsList.innerHTML += `
-                        <div onclick="openProfile('${sub.id}')" class="bg-slate-900 hover:bg-slate-700/60 p-4 rounded-xl border border-slate-700 cursor-pointer flex justify-between items-center transition">
+                        <div onclick="openProfile('${sub.id}')" class="bg-slate-50 hover:bg-indigo-50/70 p-4 rounded-xl border border-slate-200 cursor-pointer flex justify-between items-center transition">
                             <div>
-                                <h4 class="font-bold text-emerald-400">${sub.name}</h4>
-                                <p class="text-xs text-slate-400">📱 ${sub.phone}</p>
+                                <h4 class="font-bold text-slate-800">${sub.name} <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-black">#${sub.code || '---'}</span></h4>
+                                <p class="text-xs text-slate-500 mt-1">📱 ${sub.phone}</p>
                             </div>
-                            <span class="text-xs font-semibold bg-slate-800 border border-slate-600 px-3 py-1 rounded-lg text-slate-300">فتح الملف ➔</span>
+                            <span class="text-xs font-bold text-indigo-600 bg-white border border-indigo-200 px-3 py-1.5 rounded-lg shadow-sm">فتح الملف ➔</span>
                         </div>
                     `;
                 });
