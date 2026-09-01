@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة المحاسب - فرع جدة</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#2563eb',
+                            emerald: '#059669',
+                            purple: '#7c3aed',
+                            amber: '#d97706'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+<style>
+body{background:linear-gradient(135deg,#fff7ed 0%,#fdf2f8 50%,#fefce8 100%)!important;}
+#dashboardSection{background:transparent!important;}
+header{background:#fffaf0!important;}
+</style>
+</head>
+<body class="bg-stone-100 text-stone-800 font-sans min-h-screen">
+
+    <!-- 🔑 شاشة تسجيل الدخول -->
+    <div id="loginSection" class="min-h-screen flex items-center justify-center bg-slate-100 px-4">
+        <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border border-slate-200">
+            <h2 class="text-2xl font-bold text-center mb-6 text-violet-700">تسجيل دخول محاسب - فرع جدة</h2>
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-1 text-slate-700">البريد الإلكتروني</label>
+                    <input type="email" id="loginEmail" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl focus:ring-2 focus:ring-violet-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1 text-slate-700">رمز الدخول (كلمة السر)</label>
+                    <input type="password" id="loginPassword" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl focus:ring-2 focus:ring-violet-500 outline-none">
+                </div>
+                <button type="submit" class="w-full bg-violet-600 text-white py-3 rounded-xl font-bold hover:bg-violet-700 transition shadow-lg shadow-indigo-200">دخول</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 📊 لوحة التحكم الرئيسية -->
+    <div id="dashboardSection" class="hidden pb-12">
+        
+        <!-- 🌟 شريط الحقوق العلوي -->
+        <div class="bg-gradient-to-r from-indigo-700 to-purple-700 text-white text-center py-2.5 text-sm font-semibold tracking-wide shadow-sm">
+            تصميم وتطوير أحمد السعداوي
+        </div>
+
+        <!-- الهيدر الرئيسي -->
+        <header class="bg-white text-slate-800 p-4 shadow-sm flex justify-between items-center px-4 md:px-8 border-b border-slate-200">
+            <h1 class="text-xl md:text-2xl font-black text-violet-700">نظام إدارة فرع جدة</h1>
+            <button id="logoutBtn" class="bg-rose-50 text-rose-600 border border-rose-200 px-4 py-2 rounded-xl hover:bg-rose-100 text-sm font-bold transition">تسجيل الخروج</button>
+        </header>
+
+        <div class="max-w-7xl mx-auto mt-6 px-4 space-y-6">
+
+            <!-- 💰 الإيرادات والمصروفات -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div id="revenueCard" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-6 rounded-2xl shadow-lg cursor-pointer transition transform hover:scale-[1.01] flex justify-between items-center">
+                <div>
+                    <p class="text-emerald-100 text-sm font-medium">إجمالي إيرادات الشهر الحالي (اضغط للتفاصيل)</p>
+                    <h2 id="totalRevenueText" class="text-3xl md:text-4xl font-black mt-1">0 ر.س</h2>
+                </div>
+                <div class="bg-white/20 p-4 rounded-2xl border border-white/30 text-white">
+                    <span class="text-3xl">💵</span>
+                </div>
+            </div>
+            <div id="expensesCard" class="bg-gradient-to-r from-rose-600 to-orange-500 text-white p-6 rounded-2xl shadow-lg cursor-pointer transition transform hover:scale-[1.01] flex justify-between items-center">
+                <div>
+                    <p class="text-white/80 text-sm font-medium">مصروفات الشهر (اضغط للتفاصيل)</p>
+                    <h2 id="totalExpensesText" class="text-3xl md:text-4xl font-black mt-1">0 ر.س</h2>
+                </div>
+                <div class="bg-white/20 p-4 rounded-2xl border border-white/30 text-white"><span class="text-3xl">💳</span></div>
+            </div>
+            <div class="bg-gradient-to-r from-indigo-600 to-violet-600 text-white p-6 rounded-2xl shadow-lg flex justify-between items-center">
+                <div><p class="text-white/80 text-sm font-medium">صافي ربح الشهر الحالي</p><h2 id="mainNetProfitText" class="text-3xl md:text-4xl font-black mt-1">0 ر.س</h2></div>
+                <div class="bg-white/20 p-4 rounded-2xl border border-white/30"><span class="text-3xl">📈</span></div>
+            </div>
+            </div>
+
+            <!-- 📈 2. خانات الإحصائيات -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- إجمالي المشتركين -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <p class="text-slate-500 text-sm font-bold">إجمالي المشتركين المسجلين</p>
+                        <h3 id="statTotal" class="text-3xl font-black mt-2 text-violet-600">0</h3>
+                    </div>
+                    <button onclick="openCategoryModal('all')" class="mt-4 bg-violet-50 hover:bg-indigo-100 text-violet-700 font-bold py-2.5 rounded-xl text-sm w-full transition border border-violet-200">
+                        👁️ عرض القائمة
+                    </button>
+                </div>
+
+                <!-- المستمرة -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <p class="text-emerald-600 text-sm font-bold">الاشتراكات المستمرة (النشطة)</p>
+                        <h3 id="statActive" class="text-3xl font-black mt-2 text-emerald-600">0</h3>
+                    </div>
+                    <button onclick="openCategoryModal('active')" class="mt-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold py-2.5 rounded-xl text-sm w-full transition border border-emerald-200">
+                        👁️ عرض النشطين
+                    </button>
+                </div>
+
+                <!-- المنتهية -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <p class="text-amber-600 text-sm font-bold">الاشتراكات المنتهية / تنتهي قريباً</p>
+                        <h3 id="statExpiring" class="text-3xl font-black mt-2 text-amber-600">0</h3>
+                    </div>
+                    <button onclick="openCategoryModal('expiring')" class="mt-4 bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold py-2.5 rounded-xl text-sm w-full transition border border-amber-200">
+                        👁️ عرض المنتهية
+                    </button>
+                </div>
+            </div>
+
+            <!-- 🔘 أدوات التحكم: الإضافة والبحث المباشر -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                <button id="openAddModalBtn" class="w-full md:w-auto bg-violet-600 hover:bg-violet-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                    <span>➕</span> إضافة مشترك جديد
+                </button>
+                <div class="w-full md:w-1/2">
+                    <input type="text" id="searchInput" placeholder="🔍 ابحث بالاسم، رقم الهاتف، أو كود المشترك (3 أرقام)..." class="w-full p-3.5 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-violet-500 font-medium">
+                </div>
+            </div>
+
+            <!-- 🔍 نتائج البحث السريع -->
+            <div id="searchResultsSection" class="hidden bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 class="text-lg font-bold mb-4 text-violet-700">نتائج البحث:</h3>
+                <div id="searchResultsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </div>
+
+            <!-- 🧑‍🏫 قسم المدربين -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <div><h3 class="text-xl font-black text-violet-700">إدارة المدربين</h3><p class="text-sm text-slate-500 mt-1">إضافة المدربين وتسجيل ساعات العمل اليومية</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div class="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white p-7 rounded-3xl shadow-lg flex justify-between items-center"><div><p class="text-violet-100 font-bold">عدد المدربين</p><p id="statTrainers" class="text-5xl font-black mt-2">0</p></div><button id="viewTrainersStatsBtn" class="bg-white/20 hover:bg-white/30 px-5 py-3 rounded-xl font-bold">عرض</button></div>
+                  <div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white p-7 rounded-3xl shadow-lg flex justify-between items-center"><div><p class="text-amber-50 font-bold">إجمالي ساعات العمل</p><p id="statTotalTrainerHours" class="text-5xl font-black mt-2">0</p></div><button id="viewHoursStatsBtn" class="bg-white/20 hover:bg-white/30 px-5 py-3 rounded-xl font-bold">عرض</button></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <button id="openAddTrainerBtn" class="bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 rounded-xl">➕ إضافة مدرب</button>
+                    <button id="openHoursBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl">⏱️ تسجيل ساعات العمل</button>
+                </div>
+                <div class="mt-5"><input id="trainerSearchInput" type="text" placeholder="🔍 ابحث عن مدرب بالاسم أو رقم الهاتف أو الفرع..." class="w-full p-4 bg-white border border-stone-300 rounded-2xl outline-none focus:ring-2 focus:ring-violet-500"><div id="trainerSearchResults" class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4"></div></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 🪟 1. نافذة تفاصيل الإيرادات -->
+    <div id="revenueModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-xl font-bold text-violet-700">تفاصيل إيرادات فرع جدة</h3>
+                <button onclick="closeModal('revenueModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold">✕</button>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <label class="text-sm font-bold text-slate-700">اختر الشهر:</label>
+                <input type="month" id="revenueMonthPicker" class="bg-slate-50 border border-slate-300 text-slate-800 p-2.5 rounded-xl outline-none font-semibold">
+                <label class="text-sm font-bold text-slate-700">أو اختر اليوم:</label>
+                <input type="date" id="revenueDayPicker" class="bg-slate-50 border border-slate-300 text-slate-800 p-2.5 rounded-xl outline-none font-semibold">
+            </div>
+            <div id="revenueSelectedTotal" class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl font-black text-emerald-700">إجمالي الإيرادات: 0 ر.س</div>
+
+            <div class="max-h-80 overflow-y-auto space-y-2" id="revenueListContainer"></div>
+        </div>
+    </div>
+
+    <!-- 🪟 نافذة المصروفات -->
+    <div id="expensesModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-xl font-bold text-rose-700">مصروفات وصافي الربح</h3>
+                <button onclick="closeModal('expensesModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold">✕</button>
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-1 text-slate-700">اختر الشهر</label>
+                <input type="month" id="expenseMonthPicker" class="w-full bg-slate-50 border border-slate-300 text-slate-800 p-3 rounded-xl outline-none font-semibold">
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-1 text-slate-700">الإيجار (ر.س)</label>
+                <input type="number" min="0" step="0.01" id="rentExpense" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl" placeholder="اكتب مبلغ الإيجار">
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-1 text-slate-700">المرتبات (ر.س)</label>
+                <input type="number" min="0" step="0.01" id="salariesExpense" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl" placeholder="اكتب إجمالي المرتبات">
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-sm">
+                <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl"><p class="text-slate-500">إيرادات الشهر</p><p id="selectedMonthRevenue" class="font-black text-emerald-600 text-lg">0 ر.س</p></div>
+                <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl"><p class="text-slate-500">إجمالي المصروفات</p><p id="selectedMonthExpenses" class="font-black text-rose-600 text-lg">0 ر.س</p></div>
+            </div>
+            <div class="bg-violet-50 border border-violet-200 p-4 rounded-xl text-center"><p class="text-slate-600 font-bold">صافي الربح للشهر المحدد</p><p id="netProfitText" class="font-black text-2xl text-violet-700 mt-1">0 ر.س</p></div>
+            <button id="saveExpensesBtn" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-xl">حفظ المصروفات</button>
+        </div>
+    </div>
+
+    <!-- 🪟 2. نافذة عرض الفئات -->
+    <div id="categoryModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-3xl w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 id="categoryModalTitle" class="text-xl font-bold text-violet-700">قائمة المشتركين</h3>
+                <button onclick="closeModal('categoryModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold">✕</button>
+            </div>
+            <div class="max-h-96 overflow-y-auto space-y-3" id="categoryListContainer"></div>
+        </div>
+    </div>
+
+    <!-- 🪟 3. النافذة الخاصة بالمشترك (ملف المشترك) -->
+    <div id="profileModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-5">
+            <div class="flex justify-between items-start border-b border-slate-100 pb-3">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h3 id="profName" class="text-2xl font-black text-slate-800"></h3>
+                        <span id="profCode" class="bg-indigo-100 text-violet-700 px-2.5 py-0.5 rounded-lg text-xs font-black border border-violet-200">#---</span>
+                    </div>
+                    <p id="profPhone" class="text-sm text-slate-500 font-medium mt-1"></p>
+                </div>
+                <button onclick="closeModal('profileModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold">✕</button>
+            </div>
+
+            <div class="space-y-3 text-sm bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <div class="flex justify-between">
+                    <span class="text-slate-500 font-medium">قيمة الاشتراك:</span>
+                    <span id="profPrice" class="font-bold text-emerald-600"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500 font-medium">تاريخ البداية:</span>
+                    <span id="profStart" class="font-bold text-slate-700"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500 font-medium">تاريخ الانتهاء:</span>
+                    <span id="profEnd" class="font-bold text-slate-700"></span>
+                </div>
+                <div class="flex justify-between items-center pt-2 border-t border-slate-200">
+                    <span class="text-slate-500 font-medium">الحالة:</span>
+                    <span id="profStatus"></span>
+                </div>
+                <div class="pt-2 border-t border-slate-200">
+                    <span class="text-slate-500 font-medium block mb-1">الملاحظات:</span>
+                    <p id="profNotes" class="text-slate-700 font-normal bg-white p-2.5 rounded-lg border border-slate-200 min-h-[40px] whitespace-pre-wrap"></p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2">
+                <button id="profEditBtn" class="bg-amber-500 hover:bg-amber-600 text-white py-2.5 rounded-xl font-bold text-sm shadow">تعديل</button>
+                <button id="profRenewBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold text-sm shadow">تجديد</button>
+                <button id="profDeleteBtn" class="bg-rose-600 hover:bg-rose-700 text-white py-2.5 rounded-xl font-bold text-sm shadow">حذف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🪟 4. نافذة الإضافة/التعديل -->
+    <div id="subscriberModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <h3 id="modalTitle" class="text-xl font-bold mb-4 text-violet-700">إضافة مشترك جديد - فرع جدة</h3>
+            <form id="subscriberForm" class="space-y-4">
+                <input type="hidden" id="editDocId">
+                <input type="hidden" id="subCode">
+                
+                <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-700">اسم المشترك</label>
+                    <input type="text" id="subName" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-violet-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-700">رقم ولي الأمر</label>
+                    <input type="tel" id="subPhone" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-violet-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-700">قيمة الاشتراك (ر.س)</label>
+                    <input type="number" id="subPrice" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-violet-500">
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-bold mb-1 text-slate-700">مدة الاشتراك</label>
+                        <select id="subDuration" class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-violet-500 font-semibold">
+                            <option value="1">1 شهر</option>
+                            <option value="2">2 شهر</option>
+                            <option value="3">3 شهر</option>
+                            <option value="4">4 شهر</option>
+                            <option value="5">5 شهر</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-1 text-slate-700">تاريخ البداية</label>
+                        <input type="date" id="subStartDate" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-violet-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-700">تاريخ الانتهاء (تلقائي)</label>
+                    <input type="date" id="subEndDate" required readonly class="w-full p-3 bg-slate-100 border border-slate-300 text-slate-600 rounded-xl outline-none font-bold">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-700">ملاحظات</label>
+                    <textarea id="subNotes" rows="2" placeholder="أضف أي ملاحظات خاصة بالمشترك هنا..." class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none focus:ring-2 focus:ring-violet-500"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('subscriberModal')" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl font-bold">إلغاء</button>
+                    <button type="submit" class="px-5 py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl shadow">حفظ البيانات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 🪟 5. نافذة التجديد -->
+    <div id="renewModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <h3 class="text-xl font-bold text-violet-700">تجديد الاشتراك للمشترك</h3>
+            <form id="renewForm" class="space-y-4">
+                <input type="hidden" id="renewDocId">
+                <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-700">قيمة التجديد (ر.س)</label>
+                    <input type="number" id="renewPrice" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-bold mb-1 text-slate-700">مدة التجديد</label>
+                        <select id="renewDuration" class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none font-semibold">
+                            <option value="1">1 شهر</option>
+                            <option value="2">2 شهر</option>
+                            <option value="3">3 شهر</option>
+                            <option value="4">4 شهر</option>
+                            <option value="5">5 شهر</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-1 text-slate-700">تاريخ البداية</label>
+                        <input type="date" id="renewStartDate" required class="w-full p-3 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-1 text-slate-700">تاريخ نهاية التجديد</label>
+                    <input type="date" id="renewEndDate" required readonly class="w-full p-3 bg-slate-100 border border-slate-300 text-slate-600 rounded-xl outline-none font-bold">
+                </div>
+                <div class="flex justify-end gap-3 pt-4">
+                    <button type="button" onclick="closeModal('renewModal')" class="px-5 py-2.5 bg-slate-200 text-slate-700 font-bold rounded-xl">إلغاء</button>
+                    <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow">تأكيد التجديد</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="trainerStatsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50"><div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl"><div class="flex justify-between"><h3 id="trainerStatsTitle" class="text-xl font-black text-violet-700">إحصائيات المدربين</h3><button onclick="closeModal('trainerStatsModal')">✕</button></div><div class="flex gap-3 my-4"><select id="trainerStatsMode" class="p-3 border rounded-xl"><option value="day">حسب اليوم</option><option value="month">حسب الشهر</option></select><input id="trainerStatsDate" type="date" class="p-3 border rounded-xl flex-1"><input id="trainerStatsMonth" type="month" class="p-3 border rounded-xl flex-1 hidden"></div><div id="trainerStatsContent"></div></div></div>
+    <!-- 🧑‍🏫 نافذة إضافة مدرب -->
+    <div id="trainerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50"><div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl"><div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-violet-700">إضافة مدرب</h3><button onclick="closeModal('trainerModal')">✕</button></div><form id="trainerForm" class="space-y-3"><input id="trainerName" required placeholder="اسم المدرب" class="w-full p-3 border rounded-xl"><input id="trainerPhone" required placeholder="رقم الهاتف" class="w-full p-3 border rounded-xl"><input id="trainerBranch" required placeholder="الفرع" class="w-full p-3 border rounded-xl" value="فرع جدة"><button class="w-full bg-violet-600 text-white font-bold py-3 rounded-xl">حفظ المدرب</button></form></div></div>
+    <!-- ⏱️ نافذة تسجيل ساعات العمل -->
+    <div id="hoursModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50"><div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl"><div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-emerald-700">تسجيل ساعات العمل</h3><button onclick="closeModal('hoursModal')">✕</button></div><form id="hoursForm" class="space-y-3"><select id="hoursTrainer" required class="w-full p-3 border rounded-xl"><option value="">اختر المدرب</option></select><input type="date" id="hoursDate" required class="w-full p-3 border rounded-xl"><select id="hoursShift" required class="w-full p-3 border rounded-xl"><option value="">اختر الوردية</option><option value="1">1 - عدد ساعات العمل</option><option value="2">2 - عدد ساعات العمل</option></select><button class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl">حفظ ساعات العمل</button></form></div></div>
+    <!-- 📋 ملف المدرب -->
+    <div id="trainerProfileModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50"><div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl"><div class="flex justify-between items-center border-b pb-3"><div><h3 id="trainerProfName" class="text-xl font-black"></h3><p id="trainerProfPhone" class="text-sm text-slate-500"></p><p id="trainerProfBranch" class="text-sm text-slate-500"></p></div><button onclick="closeModal('trainerProfileModal')">✕</button></div><div class="bg-violet-50 p-4 rounded-xl mt-4 text-center"><p class="text-sm text-slate-500">إجمالي ساعات العمل</p><p id="trainerTotalHours" class="text-3xl font-black text-violet-700">0 ساعة</p></div><div id="trainerHoursList" class="mt-4 max-h-64 overflow-y-auto space-y-2"></div><div class="grid grid-cols-2 gap-3 mt-5"><button id="editTrainerBtn" class="bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-xl font-bold">تعديل المدرب</button><button id="deleteTrainerBtn" class="bg-rose-600 hover:bg-rose-700 text-white py-3 rounded-xl font-bold">حذف المدرب</button></div></div></div>
+
+    <!-- Firebase SDK Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDxbhfTWqjkLy7-H44erycH-SJgAYzc2wo",
+            authDomain: "whisper-novels.firebaseapp.com",
+            databaseURL: "https://whisper-novels-default-rtdb.firebaseio.com",
+            projectId: "whisper-novels",
+            storageBucket: "whisper-novels.firebasestorage.app",
+            messagingSenderId: "711043428517",
+            appId: "1:711043428517:web:5503a770d75e1a996c9d4c",
+            measurementId: "G-3D5X1PT4JV"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const BRANCH_COLLECTION = "branch1_subscribers";
+        const EXPENSES_COLLECTION = "branch1_expenses";
+        const TRAINERS_COLLECTION = "branch1_trainers";
+        const TRAINER_HOURS_COLLECTION = "branch1_trainer_hours";
+        let allTrainers = [];
+        let allSubscribers = [];
+        let currentExpenses = { rent: 0, salaries: 0 };
+
+        // حساب تاريخ النهاية تلقائياً
+        function calculateEndDate(startDateStr, monthsCount) {
+            if (!startDateStr) return '';
+            const d = new Date(startDateStr);
+            d.setMonth(d.getMonth() + parseInt(monthsCount));
+            return d.toISOString().split('T')[0];
+        }
+
+        // توليد كود عشوائي فريد من 3 أرقام
+        function generateUniqueCode() {
+            const existingCodes = allSubscribers.map(s => s.code).filter(Boolean);
+            let newCode;
+            do {
+                newCode = Math.floor(100 + Math.random() * 900).toString();
+            } while (existingCodes.includes(newCode));
+            return newCode;
+        }
+
+        document.getElementById('subStartDate').addEventListener('change', () => {
+            document.getElementById('subEndDate').value = calculateEndDate(
+                document.getElementById('subStartDate').value,
+                document.getElementById('subDuration').value
+            );
+        });
+
+        document.getElementById('subDuration').addEventListener('change', () => {
+            document.getElementById('subEndDate').value = calculateEndDate(
+                document.getElementById('subStartDate').value,
+                document.getElementById('subDuration').value
+            );
+        });
+
+        document.getElementById('renewStartDate').addEventListener('change', () => {
+            document.getElementById('renewEndDate').value = calculateEndDate(
+                document.getElementById('renewStartDate').value,
+                document.getElementById('renewDuration').value
+            );
+        });
+
+        document.getElementById('renewDuration').addEventListener('change', () => {
+            document.getElementById('renewEndDate').value = calculateEndDate(
+                document.getElementById('renewStartDate').value,
+                document.getElementById('renewDuration').value
+            );
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value);
+            } catch (err) {
+                alert("بيانات الدخول غير صحيحة");
+            }
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('dashboardSection').classList.remove('hidden');
+                loadSubscribers();
+            } else {
+                document.getElementById('loginSection').classList.remove('hidden');
+                document.getElementById('dashboardSection').classList.add('hidden');
+            }
+        });
+
+        window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
+
+        async function loadSubscribers() {
+            try {
+                const q = query(collection(db, BRANCH_COLLECTION), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                allSubscribers = [];
+                querySnapshot.forEach((doc) => {
+                    allSubscribers.push({ id: doc.id, ...doc.data() });
+                });
+                updateStatsAndRevenue();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function getMonthRevenue(monthStr) {
+            return allSubscribers.filter(s => s.startDate && s.startDate.startsWith(monthStr))
+                .reduce((sum, s) => sum + parseFloat(s.price || 0), 0);
+        }
+
+        function updateExpenseSummary() {
+            const revenue = getMonthRevenue(document.getElementById('expenseMonthPicker').value);
+            const rent = parseFloat(document.getElementById('rentExpense').value) || 0;
+            const salaries = parseFloat(document.getElementById('salariesExpense').value) || 0;
+            const expenses = rent + salaries;
+            document.getElementById('selectedMonthRevenue').innerText = revenue.toLocaleString() + ' ر.س';
+            document.getElementById('selectedMonthExpenses').innerText = expenses.toLocaleString() + ' ر.س';
+            document.getElementById('netProfitText').innerText = (revenue - expenses).toLocaleString() + ' ر.س';
+        }
+
+        async function loadExpensesForMonth(monthStr) {
+            const snap = await getDoc(doc(db, EXPENSES_COLLECTION, monthStr));
+            const data = snap.exists() ? snap.data() : { rent: 0, salaries: 0 };
+            currentExpenses = data;
+            document.getElementById('rentExpense').value = data.rent || '';
+            document.getElementById('salariesExpense').value = data.salaries || '';
+            updateExpenseSummary();
+        }
+
+        document.getElementById('expensesCard').addEventListener('click', async () => {
+            const picker = document.getElementById('expenseMonthPicker');
+            picker.value = new Date().toISOString().slice(0, 7);
+            document.getElementById('expensesModal').classList.remove('hidden');
+            await loadExpensesForMonth(picker.value);
+        });
+        document.getElementById('expenseMonthPicker').addEventListener('change', e => loadExpensesForMonth(e.target.value));
+        document.getElementById('rentExpense').addEventListener('input', updateExpenseSummary);
+        document.getElementById('salariesExpense').addEventListener('input', updateExpenseSummary);
+        document.getElementById('saveExpensesBtn').addEventListener('click', async () => {
+            const month = document.getElementById('expenseMonthPicker').value;
+            if (!month) return;
+            const rent = parseFloat(document.getElementById('rentExpense').value) || 0;
+            const salaries = parseFloat(document.getElementById('salariesExpense').value) || 0;
+            await setDoc(doc(db, EXPENSES_COLLECTION, month), { rent, salaries, updatedAt: new Date() });
+            currentExpenses = { rent, salaries };
+            document.getElementById('totalExpensesText').innerText = (rent + salaries).toLocaleString() + ' ر.س';
+            updateStatsAndRevenue();
+            alert('تم حفظ المصروفات بنجاح');
+        });
+
+        function updateStatsAndRevenue() {
+            const today = new Date().toISOString().split('T')[0];
+            const currentMonth = new Date().toISOString().slice(0, 7);
+
+            let active = 0, expiring = 0, monthRevenue = 0;
+
+            allSubscribers.forEach(sub => {
+                if (sub.endDate >= today) active++;
+                else expiring++;
+
+                if (sub.startDate && sub.startDate.startsWith(currentMonth)) {
+                    monthRevenue += parseFloat(sub.price || 0);
+                }
+            });
+
+            document.getElementById('statTotal').innerText = allSubscribers.length;
+            document.getElementById('statActive').innerText = active;
+            document.getElementById('statExpiring').innerText = expiring;
+            document.getElementById('totalRevenueText').innerText = monthRevenue.toLocaleString() + " ر.س";
+            updateMainProfit(monthRevenue);
+        }
+
+        async function updateMainProfit(monthRevenue) {
+            try { const month=new Date().toISOString().slice(0,7); const snap=await getDoc(doc(db,EXPENSES_COLLECTION,month)); const ex=snap.exists()?snap.data():{rent:0,salaries:0}; const expenses=Number(ex.rent||0)+Number(ex.salaries||0); document.getElementById('totalExpensesText').innerText=expenses.toLocaleString()+' ر.س'; document.getElementById('mainNetProfitText').innerText=(monthRevenue-expenses).toLocaleString()+' ر.س'; } catch(e){console.error(e);}
+        }
+
+        document.getElementById('revenueCard').addEventListener('click', () => {
+            const picker = document.getElementById('revenueMonthPicker');
+            picker.value = new Date().toISOString().slice(0, 7);
+            renderRevenueList(picker.value);
+            document.getElementById('revenueModal').classList.remove('hidden');
+        });
+
+        document.getElementById('revenueMonthPicker').addEventListener('change', (e) => {
+            document.getElementById('revenueDayPicker').value='';
+            renderRevenueList(e.target.value);
+        });
+
+        function renderRevenueList(monthStr) {
+            const container = document.getElementById('revenueListContainer');
+            container.innerHTML = '';
+            const filtered = allSubscribers.filter(s => s.startDate && s.startDate.startsWith(monthStr));
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-400 py-4">لا توجد عمليات مقبوضة لهذا الشهر</p>`;
+                return;
+            }
+
+            filtered.forEach(sub => {
+                container.innerHTML += `
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex justify-between items-center text-sm">
+                        <div>
+                            <p class="font-bold text-slate-800">${sub.name} <span class="text-xs text-violet-600 font-bold">#${sub.code || '---'}</span></p>
+                            <p class="text-xs text-slate-500">تاريخ الاشتراك: ${sub.startDate}</p>
+                        </div>
+                        <span class="font-black text-emerald-600">${sub.price} ر.س</span>
+                    </div>
+                `;
+            });
+        }
+
+        window.openCategoryModal = (type) => {
+            const title = document.getElementById('categoryModalTitle');
+            const container = document.getElementById('categoryListContainer');
+            container.innerHTML = '';
+            const today = new Date().toISOString().split('T')[0];
+
+            let list = [];
+            if (type === 'all') { title.innerText = "جميع المشتركين المسجلين - فرع جدة"; list = allSubscribers; }
+            else if (type === 'active') { title.innerText = "المشتركين النشطين"; list = allSubscribers.filter(s => s.endDate >= today); }
+            else if (type === 'expiring') { title.innerText = "المشتركين المنتهين / تنتهي قريباً"; list = allSubscribers.filter(s => s.endDate < today); }
+
+            list.forEach(sub => {
+                const isExp = sub.endDate < today;
+                container.innerHTML += `
+                    <div onclick="openProfile('${sub.id}')" class="bg-slate-50 hover:bg-violet-50/60 p-4 rounded-xl border border-slate-200 flex justify-between items-center cursor-pointer transition">
+                        <div>
+                            <h4 class="font-bold text-slate-800">${sub.name} <span class="text-xs bg-indigo-100 text-violet-700 px-2 py-0.5 rounded-md font-black">#${sub.code || '---'}</span></h4>
+                            <p class="text-xs text-slate-500 mt-1">📱 ${sub.phone} | ينتهي: ${sub.endDate}</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="px-2.5 py-1 text-xs rounded-full font-bold ${isExp ? 'bg-rose-100 text-rose-600' : 'bg-emerald-100 text-emerald-600'}">
+                                ${isExp ? 'منتهي' : 'نشط'}
+                            </span>
+                            <p class="text-xs font-black text-violet-600 mt-1">${sub.price} ر.س</p>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('categoryModal').classList.remove('hidden');
+        };
+
+        window.openProfile = (id) => {
+            closeModal('categoryModal');
+            document.getElementById('searchResultsSection').classList.add('hidden');
+            const sub = allSubscribers.find(s => s.id === id);
+            if (!sub) return;
+
+            const today = new Date().toISOString().split('T')[0];
+            const isExp = sub.endDate < today;
+
+            document.getElementById('profName').innerText = sub.name;
+            document.getElementById('profCode').innerText = "#" + (sub.code || '---');
+            document.getElementById('profPhone').innerText = "📱 " + sub.phone;
+            document.getElementById('profPrice').innerText = sub.price + " ر.س";
+            document.getElementById('profStart').innerText = sub.startDate;
+            document.getElementById('profEnd').innerText = sub.endDate;
+            document.getElementById('profNotes').innerText = sub.notes || 'لا توجد ملاحظات مدونة';
+            
+            document.getElementById('profStatus').innerHTML = `
+                <span class="px-3 py-1 text-xs rounded-full font-bold ${isExp ? 'bg-rose-100 text-rose-600' : 'bg-emerald-100 text-emerald-600'}">
+                    ${isExp ? 'منتهي' : 'نشط'}
+                </span>
+            `;
+
+            document.getElementById('profEditBtn').onclick = () => { closeModal('profileModal'); editSubscriber(id); };
+            document.getElementById('profRenewBtn').onclick = () => { closeModal('profileModal'); openRenewModal(id); };
+            document.getElementById('profDeleteBtn').onclick = () => { deleteSubscriber(id); };
+
+            document.getElementById('profileModal').classList.remove('hidden');
+        };
+
+        document.getElementById('openAddModalBtn').addEventListener('click', () => {
+            document.getElementById('modalTitle').innerText = "إضافة مشترك جديد - فرع جدة";
+            document.getElementById('editDocId').value = "";
+            document.getElementById('subscriberForm').reset();
+            
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('subStartDate').value = todayStr;
+            document.getElementById('subDuration').value = "1";
+            document.getElementById('subEndDate').value = calculateEndDate(todayStr, 1);
+            document.getElementById('subCode').value = generateUniqueCode();
+
+            document.getElementById('subscriberModal').classList.remove('hidden');
+        });
+
+        document.getElementById('subscriberForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('editDocId').value;
+            const data = {
+                name: document.getElementById('subName').value,
+                phone: document.getElementById('subPhone').value,
+                price: parseFloat(document.getElementById('subPrice').value),
+                startDate: document.getElementById('subStartDate').value,
+                endDate: document.getElementById('subEndDate').value,
+                duration: document.getElementById('subDuration').value,
+                notes: document.getElementById('subNotes').value,
+                updatedAt: new Date()
+            };
+
+            try {
+                if (editId) {
+                    await updateDoc(doc(db, BRANCH_COLLECTION, editId), data);
+                } else {
+                    data.code = document.getElementById('subCode').value || generateUniqueCode();
+                    data.createdAt = new Date();
+                    await addDoc(collection(db, BRANCH_COLLECTION), data);
+                }
+                closeModal('subscriberModal');
+                loadSubscribers();
+            } catch (err) {
+                alert("حدث خطأ: " + err.message);
+            }
+        });
+
+        window.editSubscriber = (id) => {
+            const sub = allSubscribers.find(s => s.id === id);
+            if (!sub) return;
+
+            document.getElementById('modalTitle').innerText = "تعديل بيانات المشترك";
+            document.getElementById('editDocId').value = sub.id;
+            document.getElementById('subName').value = sub.name;
+            document.getElementById('subPhone').value = sub.phone;
+            document.getElementById('subPrice').value = sub.price;
+            document.getElementById('subDuration').value = sub.duration || "1";
+            document.getElementById('subStartDate').value = sub.startDate;
+            document.getElementById('subEndDate').value = sub.endDate;
+            document.getElementById('subNotes').value = sub.notes || "";
+            document.getElementById('subCode').value = sub.code || "";
+
+            document.getElementById('subscriberModal').classList.remove('hidden');
+        };
+
+        window.openRenewModal = (id) => {
+            const sub = allSubscribers.find(s => s.id === id);
+            if (!sub) return;
+
+            document.getElementById('renewDocId').value = id;
+            document.getElementById('renewPrice').value = sub.price;
+            
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('renewStartDate').value = todayStr;
+            document.getElementById('renewDuration').value = "1";
+            document.getElementById('renewEndDate').value = calculateEndDate(todayStr, 1);
+
+            document.getElementById('renewModal').classList.remove('hidden');
+        };
+
+        document.getElementById('renewForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('renewDocId').value;
+            const data = {
+                price: parseFloat(document.getElementById('renewPrice').value),
+                startDate: document.getElementById('renewStartDate').value,
+                endDate: document.getElementById('renewEndDate').value,
+                duration: document.getElementById('renewDuration').value
+            };
+
+            try {
+                await updateDoc(doc(db, BRANCH_COLLECTION, id), data);
+                closeModal('renewModal');
+                loadSubscribers();
+            } catch (err) {
+                alert("خطأ أثناء التجديد: " + err.message);
+            }
+        });
+
+        window.deleteSubscriber = async (id) => {
+            if (confirm("هل أنت تأكد من حذف هذا المشترك نهائياً؟")) {
+                try {
+                    await deleteDoc(doc(db, BRANCH_COLLECTION, id));
+                    closeModal('profileModal');
+                    loadSubscribers();
+                } catch (err) {
+                    alert("خطأ أثناء الحذف: " + err.message);
+                }
+            }
+        };
+
+
+        // ===== إدارة المدربين =====
+        async function loadTrainers() {
+            const snap=await getDocs(collection(db,TRAINERS_COLLECTION));
+            allTrainers=snap.docs.map(d=>({id:d.id,...d.data()}));
+            const hs=await getDocs(collection(db,TRAINER_HOURS_COLLECTION));
+            const totalHours=hs.docs.reduce((sum,d)=>sum+Number(d.data().hours||0),0);
+            document.getElementById('statTrainers').innerText=allTrainers.length;
+            document.getElementById('statTotalTrainerHours').innerText=totalHours;
+            renderTrainerSearch('');
+            const sel=document.getElementById('hoursTrainer'); sel.innerHTML='<option value="">اختر المدرب</option>'+allTrainers.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
+        }
+        function renderTrainerSearch(q){const x=q.toLowerCase().trim();const rows=allTrainers.filter(t=>!x||t.name.toLowerCase().includes(x)||(t.phone||'').includes(x)||(t.branch||'').toLowerCase().includes(x));document.getElementById('trainerSearchResults').innerHTML=rows.length?rows.map(t=>`<div onclick="openTrainerProfile('${t.id}')" class="bg-white hover:bg-violet-50 cursor-pointer p-4 rounded-2xl border border-stone-200 transition"><p class="font-black text-violet-700">${t.name}</p><p class="text-sm text-stone-500">📱 ${t.phone} • ${t.branch}</p></div>`).join(''):'<p class="text-stone-400">لا توجد نتائج مطابقة</p>';}
+        document.getElementById('trainerSearchInput').addEventListener('input',e=>renderTrainerSearch(e.target.value));
+
+        document.getElementById('openAddTrainerBtn').onclick=()=>document.getElementById('trainerModal').classList.remove('hidden');
+        document.getElementById('openHoursBtn').onclick=()=>{document.getElementById('hoursDate').value=new Date().toISOString().split('T')[0];document.getElementById('hoursModal').classList.remove('hidden');};
+        document.getElementById('trainerForm').addEventListener('submit', async e=>{e.preventDefault(); await addDoc(collection(db,TRAINERS_COLLECTION),{name:trainerName.value,phone:trainerPhone.value,branch:trainerBranch.value,createdAt:new Date()}); e.target.reset(); closeModal('trainerModal'); loadTrainers();});
+        document.getElementById('hoursForm').addEventListener('submit', async e=>{e.preventDefault(); const t=allTrainers.find(x=>x.id===hoursTrainer.value); if(!t)return; await addDoc(collection(db,TRAINER_HOURS_COLLECTION),{trainerId:t.id,trainerName:t.name,date:hoursDate.value,shift:hoursShift.value,hours:parseFloat(hoursShift.value),createdAt:new Date()}); closeModal('hoursModal'); e.target.reset(); alert('تم تسجيل ساعات العمل بنجاح'); loadTrainers();});
+        document.getElementById('revenueDayPicker').addEventListener('change',e=>{if(e.target.value){document.getElementById('revenueMonthPicker').value='';renderRevenueList(e.target.value);}});
+        const oldRenderRevenueList=renderRevenueList; renderRevenueList=function(period){const c=document.getElementById('revenueListContainer');const filtered=allSubscribers.filter(x=>x.startDate&&x.startDate.startsWith(period));const total=filtered.reduce((a,x)=>a+Number(x.price||0),0);document.getElementById('revenueSelectedTotal').innerText='إجمالي الإيرادات: '+total.toLocaleString()+' ر.س';c.innerHTML=filtered.length?filtered.map(x=>`<div class="bg-white p-3 rounded-xl border flex justify-between"><span>${x.name} - ${x.startDate}</span><b>${x.price} ر.س</b></div>`).join(''):'<p class="text-center text-slate-400 py-4">لا توجد إيرادات لهذه الفترة</p>';};
+        function openTrainerStats(type){document.getElementById('trainerStatsTitle').innerText=type==='trainers'?'عدد المدربين':'إجمالي ساعات العمل';document.getElementById('trainerStatsModal').dataset.type=type;document.getElementById('trainerStatsDate').value=new Date().toISOString().split('T')[0];document.getElementById('trainerStatsMonth').value=new Date().toISOString().slice(0,7);document.getElementById('trainerStatsModal').classList.remove('hidden');renderTrainerStats();}
+        async function renderTrainerStats(){const mode=document.getElementById('trainerStatsMode').value;const key=mode==='day'?document.getElementById('trainerStatsDate').value:document.getElementById('trainerStatsMonth').value;document.getElementById('trainerStatsDate').classList.toggle('hidden',mode!=='day');document.getElementById('trainerStatsMonth').classList.toggle('hidden',mode!=='month');const hs=await getDocs(collection(db,TRAINER_HOURS_COLLECTION));const rows=hs.docs.map(d=>d.data()).filter(x=>(x.date||'').startsWith(key));const type=document.getElementById('trainerStatsModal').dataset.type;const content=document.getElementById('trainerStatsContent');if(type==='hours'){content.innerHTML='<div class="text-4xl font-black text-amber-600 text-center p-6">'+rows.reduce((a,x)=>a+Number(x.hours||0),0)+' ساعة</div>';}else{const ids=[...new Set(rows.map(x=>x.trainerId))];content.innerHTML='<div class="text-4xl font-black text-violet-700 text-center p-6">'+ids.length+' مدرب عمل في الفترة المختارة</div>';}}
+        document.getElementById('viewTrainersStatsBtn').onclick=()=>openTrainerStats('trainers');document.getElementById('viewHoursStatsBtn').onclick=()=>openTrainerStats('hours');document.getElementById('trainerStatsMode').addEventListener('change',renderTrainerStats);document.getElementById('trainerStatsDate').addEventListener('change',renderTrainerStats);document.getElementById('trainerStatsMonth').addEventListener('change',renderTrainerStats);
+        window.openTrainerProfile=async id=>{const t=allTrainers.find(x=>x.id===id); if(!t)return; trainerProfName.innerText=t.name;trainerProfPhone.innerText='📱 '+t.phone;trainerProfBranch.innerText='الفرع: '+t.branch; const snap=await getDocs(collection(db,TRAINER_HOURS_COLLECTION)); const rows=snap.docs.map(d=>d.data()).filter(x=>x.trainerId===id).sort((a,b)=>b.date.localeCompare(a.date)); const total=rows.reduce((a,x)=>a+Number(x.hours||0),0);trainerTotalHours.innerText=total+' ساعة';trainerHoursList.innerHTML=rows.length?rows.map(x=>`<div class="p-3 bg-slate-50 rounded-xl border flex justify-between"><span>${x.date} • ${x.shift}</span><b>${x.hours} ساعة</b></div>`).join(''):'<p class="text-slate-400 text-center">لا توجد ساعات مسجلة</p>';document.getElementById('editTrainerBtn').onclick=async()=>{const name=prompt('اسم المدرب',t.name);if(name===null)return;const phone=prompt('رقم الهاتف',t.phone);if(phone===null)return;const branch=prompt('الفرع',t.branch);if(branch===null)return;await updateDoc(doc(db,TRAINERS_COLLECTION,id),{name,phone,branch});closeModal('trainerProfileModal');loadTrainers();};document.getElementById('deleteTrainerBtn').onclick=async()=>{if(!confirm('هل تريد حذف المدرب؟'))return;await deleteDoc(doc(db,TRAINERS_COLLECTION,id));const allHours=await getDocs(collection(db,TRAINER_HOURS_COLLECTION));await Promise.all(allHours.docs.filter(d=>d.data().trainerId===id).map(d=>deleteDoc(d.ref)));closeModal('trainerProfileModal');loadTrainers();};document.getElementById('trainerProfileModal').classList.remove('hidden');};
+
+        // تحديث قسم المدربين بعد تسجيل الدخول
+        const originalLoadSubscribers = loadSubscribers;
+        loadSubscribers = async function(){ await originalLoadSubscribers(); await loadTrainers(); };
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const queryText = e.target.value.toLowerCase().trim();
+            const resultsSection = document.getElementById('searchResultsSection');
+            const resultsList = document.getElementById('searchResultsList');
+
+            if (!queryText) {
+                resultsSection.classList.add('hidden');
+                return;
+            }
+
+            const filtered = allSubscribers.filter(sub => 
+                sub.name.toLowerCase().includes(queryText) || 
+                sub.phone.includes(queryText) ||
+                (sub.code && sub.code.includes(queryText))
+            );
+
+            resultsList.innerHTML = '';
+            if (filtered.length === 0) {
+                resultsList.innerHTML = `<p class="text-slate-400 text-sm">لا توجد نتائج مطابقة</p>`;
+            } else {
+                filtered.forEach(sub => {
+                    resultsList.innerHTML += `
+                        <div onclick="openProfile('${sub.id}')" class="bg-slate-50 hover:bg-violet-50/70 p-4 rounded-xl border border-slate-200 cursor-pointer flex justify-between items-center transition">
+                            <div>
+                                <h4 class="font-bold text-slate-800">${sub.name} <span class="text-xs bg-indigo-100 text-violet-700 px-2 py-0.5 rounded font-black">#${sub.code || '---'}</span></h4>
+                                <p class="text-xs text-slate-500 mt-1">📱 ${sub.phone}</p>
+                            </div>
+                            <span class="text-xs font-bold text-violet-600 bg-white border border-violet-200 px-3 py-1.5 rounded-lg shadow-sm">فتح الملف ➔</span>
+                        </div>
+                    `;
+                });
+            }
+            resultsSection.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
