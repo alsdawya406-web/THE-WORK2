@@ -429,6 +429,18 @@ header{background:#fffaf0!important;}
         let currentExpenses = { rent: 0, salaries: 0 };
         let unsubscribeSubscribers = null;
 
+        // الحصول على تاريخ اليوم حسب وقت الجهاز المحلي، وليس UTC
+        function getLocalDateString(date = new Date()) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function getLocalMonthString(date = new Date()) {
+            return getLocalDateString(date).slice(0, 7);
+        }
+
         // حساب تاريخ النهاية تلقائياً
         function calculateEndDate(startDateStr, monthsCount) {
             if (!startDateStr) return '';
@@ -503,14 +515,32 @@ header{background:#fffaf0!important;}
 
         window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
 
-        // مزامنة فورية: أي إضافة أو تعديل أو حذف على الموبايل أو اللابتوب يظهر تلقائياً على كل الأجهزة.
+        // تحميل أحدث بيانات المشتركين من Firebase ثم الاستماع لأي تغيير لحظياً.
+        async function refreshSubscribersFromServer() {
+            try {
+                const q = query(collection(db, BRANCH_COLLECTION), orderBy("createdAt", "desc"));
+                const snapshot = await getDocs(q);
+                allSubscribers = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+                updateStatsAndRevenue();
+            } catch (err) {
+                console.error("خطأ أثناء تحميل أحدث بيانات المشتركين:", err);
+            }
+        }
+
         function loadSubscribers() {
             try {
-                // منع إنشاء أكثر من مستمع لنفس البيانات.
-                if (unsubscribeSubscribers) return;
+                // ألغِ أي مستمع قديم ثم أنشئ مستمعاً جديداً لتفادي توقف المزامنة بعد تسجيل الدخول.
+                if (unsubscribeSubscribers) {
+                    unsubscribeSubscribers();
+                    unsubscribeSubscribers = null;
+                }
 
                 const q = query(collection(db, BRANCH_COLLECTION), orderBy("createdAt", "desc"));
-                unsubscribeSubscribers = onSnapshot(q, (querySnapshot) => {
+
+                // قراءة البيانات الحالية أولاً حتى يظهر آخر وضع عند فتح الموقع على أي جهاز.
+                refreshSubscribersFromServer();
+
+                unsubscribeSubscribers = onSnapshot(q, { includeMetadataChanges: false }, (querySnapshot) => {
                     allSubscribers = querySnapshot.docs.map((doc) => ({
                         id: doc.id,
                         ...doc.data()
@@ -523,6 +553,14 @@ header{background:#fffaf0!important;}
                 console.error(err);
             }
         }
+
+        // عند الرجوع للموقع أو فتحه من جديد، أعد قراءة أحدث البيانات من Firebase.
+        window.addEventListener('focus', () => {
+            if (auth.currentUser) refreshSubscribersFromServer();
+        });
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && auth.currentUser) refreshSubscribersFromServer();
+        });
 
         function getMonthRevenue(monthStr) {
             return allSubscribers.filter(s => s.startDate && s.startDate.startsWith(monthStr))
@@ -550,7 +588,7 @@ header{background:#fffaf0!important;}
 
         document.getElementById('expensesCard').addEventListener('click', async () => {
             const picker = document.getElementById('expenseMonthPicker');
-            picker.value = new Date().toISOString().slice(0, 7);
+            picker.value = getLocalMonthString();
             document.getElementById('expensesModal').classList.remove('hidden');
             await loadExpensesForMonth(picker.value);
         });
@@ -570,8 +608,8 @@ header{background:#fffaf0!important;}
         });
 
         function updateStatsAndRevenue() {
-            const today = new Date().toISOString().split('T')[0];
-            const currentMonth = new Date().toISOString().slice(0, 7);
+            const today = getLocalDateString();
+            const currentMonth = getLocalMonthString();
 
             let active = 0, expiring = 0, monthRevenue = 0;
 
@@ -592,12 +630,12 @@ header{background:#fffaf0!important;}
         }
 
         async function updateMainProfit(monthRevenue) {
-            try { const month=new Date().toISOString().slice(0,7); const snap=await getDoc(doc(db,EXPENSES_COLLECTION,month)); const ex=snap.exists()?snap.data():{rent:0,salaries:0}; const expenses=Number(ex.rent||0)+Number(ex.salaries||0); document.getElementById('totalExpensesText').innerText=expenses.toLocaleString()+' ر.س'; document.getElementById('mainNetProfitText').innerText=(monthRevenue-expenses).toLocaleString()+' ر.س'; } catch(e){console.error(e);}
+            try { const month=getLocalMonthString(); const snap=await getDoc(doc(db,EXPENSES_COLLECTION,month)); const ex=snap.exists()?snap.data():{rent:0,salaries:0}; const expenses=Number(ex.rent||0)+Number(ex.salaries||0); document.getElementById('totalExpensesText').innerText=expenses.toLocaleString()+' ر.س'; document.getElementById('mainNetProfitText').innerText=(monthRevenue-expenses).toLocaleString()+' ر.س'; } catch(e){console.error(e);}
         }
 
         document.getElementById('revenueCard').addEventListener('click', () => {
             const picker = document.getElementById('revenueMonthPicker');
-            picker.value = new Date().toISOString().slice(0, 7);
+            picker.value = getLocalMonthString();
             renderRevenueList(picker.value);
             document.getElementById('revenueModal').classList.remove('hidden');
         });
@@ -634,7 +672,7 @@ header{background:#fffaf0!important;}
             const title = document.getElementById('categoryModalTitle');
             const container = document.getElementById('categoryListContainer');
             container.innerHTML = '';
-            const today = new Date().toISOString().split('T')[0];
+            const today = getLocalDateString();
 
             let list = [];
             if (type === 'all') { title.innerText = "جميع المشتركين المسجلين - فرع جدة"; list = allSubscribers; }
@@ -667,7 +705,7 @@ header{background:#fffaf0!important;}
             const sub = allSubscribers.find(s => s.id === id);
             if (!sub) return;
 
-            const today = new Date().toISOString().split('T')[0];
+            const today = getLocalDateString();
             const isExp = sub.endDate < today;
 
             document.getElementById('profName').innerText = sub.name;
@@ -696,7 +734,7 @@ header{background:#fffaf0!important;}
             document.getElementById('editDocId').value = "";
             document.getElementById('subscriberForm').reset();
             
-            const todayStr = new Date().toISOString().split('T')[0];
+            const todayStr = getLocalDateString();
             document.getElementById('subStartDate').value = todayStr;
             document.getElementById('subDuration').value = "1";
             document.getElementById('subEndDate').value = calculateEndDate(todayStr, 1);
@@ -759,7 +797,7 @@ header{background:#fffaf0!important;}
             document.getElementById('renewDocId').value = id;
             document.getElementById('renewPrice').value = sub.price;
             
-            const todayStr = new Date().toISOString().split('T')[0];
+            const todayStr = getLocalDateString();
             document.getElementById('renewStartDate').value = todayStr;
             document.getElementById('renewDuration').value = "1";
             document.getElementById('renewEndDate').value = calculateEndDate(todayStr, 1);
@@ -814,12 +852,12 @@ header{background:#fffaf0!important;}
         document.getElementById('trainerSearchInput').addEventListener('input',e=>renderTrainerSearch(e.target.value));
 
         document.getElementById('openAddTrainerBtn').onclick=()=>document.getElementById('trainerModal').classList.remove('hidden');
-        document.getElementById('openHoursBtn').onclick=()=>{document.getElementById('hoursDate').value=new Date().toISOString().split('T')[0];document.getElementById('hoursModal').classList.remove('hidden');};
+        document.getElementById('openHoursBtn').onclick=()=>{document.getElementById('hoursDate').value=getLocalDateString();document.getElementById('hoursModal').classList.remove('hidden');};
         document.getElementById('trainerForm').addEventListener('submit', async e=>{e.preventDefault(); await addDoc(collection(db,TRAINERS_COLLECTION),{name:trainerName.value,phone:trainerPhone.value,branch:trainerBranch.value,createdAt:new Date()}); e.target.reset(); closeModal('trainerModal'); loadTrainers();});
         document.getElementById('hoursForm').addEventListener('submit', async e=>{e.preventDefault(); const t=allTrainers.find(x=>x.id===hoursTrainer.value); if(!t)return; await addDoc(collection(db,TRAINER_HOURS_COLLECTION),{trainerId:t.id,trainerName:t.name,date:hoursDate.value,shift:hoursShift.value,hours:parseFloat(hoursShift.value),createdAt:new Date()}); closeModal('hoursModal'); e.target.reset(); alert('تم تسجيل ساعات العمل بنجاح'); loadTrainers();});
         document.getElementById('revenueDayPicker').addEventListener('change',e=>{if(e.target.value){document.getElementById('revenueMonthPicker').value='';renderRevenueList(e.target.value);}});
         const oldRenderRevenueList=renderRevenueList; renderRevenueList=function(period){const c=document.getElementById('revenueListContainer');const filtered=allSubscribers.filter(x=>x.startDate&&x.startDate.startsWith(period));const total=filtered.reduce((a,x)=>a+Number(x.price||0),0);document.getElementById('revenueSelectedTotal').innerText='إجمالي الإيرادات: '+total.toLocaleString()+' ر.س';c.innerHTML=filtered.length?filtered.map(x=>`<div class="bg-white p-3 rounded-xl border flex justify-between"><span>${x.name} - ${x.startDate}</span><b>${x.price} ر.س</b></div>`).join(''):'<p class="text-center text-slate-400 py-4">لا توجد إيرادات لهذه الفترة</p>';};
-        function openTrainerStats(type){document.getElementById('trainerStatsTitle').innerText=type==='trainers'?'عدد المدربين':'إجمالي ساعات العمل';document.getElementById('trainerStatsModal').dataset.type=type;document.getElementById('trainerStatsDate').value=new Date().toISOString().split('T')[0];document.getElementById('trainerStatsMonth').value=new Date().toISOString().slice(0,7);document.getElementById('trainerStatsModal').classList.remove('hidden');renderTrainerStats();}
+        function openTrainerStats(type){document.getElementById('trainerStatsTitle').innerText=type==='trainers'?'عدد المدربين':'إجمالي ساعات العمل';document.getElementById('trainerStatsModal').dataset.type=type;document.getElementById('trainerStatsDate').value=getLocalDateString();document.getElementById('trainerStatsMonth').value=getLocalMonthString();document.getElementById('trainerStatsModal').classList.remove('hidden');renderTrainerStats();}
         async function renderTrainerStats(){const mode=document.getElementById('trainerStatsMode').value;const key=mode==='day'?document.getElementById('trainerStatsDate').value:document.getElementById('trainerStatsMonth').value;document.getElementById('trainerStatsDate').classList.toggle('hidden',mode!=='day');document.getElementById('trainerStatsMonth').classList.toggle('hidden',mode!=='month');const hs=await getDocs(collection(db,TRAINER_HOURS_COLLECTION));const rows=hs.docs.map(d=>d.data()).filter(x=>(x.date||'').startsWith(key));const type=document.getElementById('trainerStatsModal').dataset.type;const content=document.getElementById('trainerStatsContent');if(type==='hours'){content.innerHTML='<div class="text-4xl font-black text-amber-600 text-center p-6">'+rows.reduce((a,x)=>a+Number(x.hours||0),0)+' ساعة</div>';}else{const ids=[...new Set(rows.map(x=>x.trainerId))];content.innerHTML='<div class="text-4xl font-black text-violet-700 text-center p-6">'+ids.length+' مدرب عمل في الفترة المختارة</div>';}}
         document.getElementById('viewTrainersStatsBtn').onclick=()=>openTrainerStats('trainers');document.getElementById('viewHoursStatsBtn').onclick=()=>openTrainerStats('hours');document.getElementById('trainerStatsMode').addEventListener('change',renderTrainerStats);document.getElementById('trainerStatsDate').addEventListener('change',renderTrainerStats);document.getElementById('trainerStatsMonth').addEventListener('change',renderTrainerStats);
         window.openTrainerProfile=async id=>{const t=allTrainers.find(x=>x.id===id); if(!t)return; trainerProfName.innerText=t.name;trainerProfPhone.innerText='📱 '+t.phone;trainerProfBranch.innerText='الفرع: '+t.branch; const snap=await getDocs(collection(db,TRAINER_HOURS_COLLECTION)); const rows=snap.docs.map(d=>d.data()).filter(x=>x.trainerId===id).sort((a,b)=>b.date.localeCompare(a.date)); const total=rows.reduce((a,x)=>a+Number(x.hours||0),0);trainerTotalHours.innerText=total+' ساعة';trainerHoursList.innerHTML=rows.length?rows.map(x=>`<div class="p-3 bg-slate-50 rounded-xl border flex justify-between"><span>${x.date} • ${x.shift}</span><b>${x.hours} ساعة</b></div>`).join(''):'<p class="text-slate-400 text-center">لا توجد ساعات مسجلة</p>';document.getElementById('editTrainerBtn').onclick=async()=>{const name=prompt('اسم المدرب',t.name);if(name===null)return;const phone=prompt('رقم الهاتف',t.phone);if(phone===null)return;const branch=prompt('الفرع',t.branch);if(branch===null)return;await updateDoc(doc(db,TRAINERS_COLLECTION,id),{name,phone,branch});closeModal('trainerProfileModal');loadTrainers();};document.getElementById('deleteTrainerBtn').onclick=async()=>{if(!confirm('هل تريد حذف المدرب؟'))return;await deleteDoc(doc(db,TRAINERS_COLLECTION,id));const allHours=await getDocs(collection(db,TRAINER_HOURS_COLLECTION));await Promise.all(allHours.docs.filter(d=>d.data().trainerId===id).map(d=>deleteDoc(d.ref)));closeModal('trainerProfileModal');loadTrainers();};document.getElementById('trainerProfileModal').classList.remove('hidden');};
