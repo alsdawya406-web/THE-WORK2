@@ -214,7 +214,19 @@ header{background:#fffaf0!important;}
                 <div><h3 class="text-xl font-black text-violet-700">إدارة المدربين</h3><p class="text-sm text-slate-500 mt-1">إضافة المدربين وتسجيل ساعات العمل اليومية</p></div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div class="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white p-7 rounded-3xl shadow-lg flex justify-between items-center"><div><p class="text-violet-100 font-bold">عدد المدربين</p><p id="statTrainers" class="text-5xl font-black mt-2">0</p></div><button id="viewTrainersStatsBtn" class="bg-white/20 hover:bg-white/30 px-5 py-3 rounded-xl font-bold">عرض</button></div>
-                  <div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white p-7 rounded-3xl shadow-lg flex justify-between items-center"><div><p class="text-amber-50 font-bold">إجمالي ساعات العمل</p><p id="statTotalTrainerHours" class="text-5xl font-black mt-2">0</p></div><button id="viewHoursStatsBtn" class="bg-white/20 hover:bg-white/30 px-5 py-3 rounded-xl font-bold">عرض</button></div>
+                  <div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white p-7 rounded-3xl shadow-lg flex flex-col justify-between">
+                      <div class="flex justify-between items-start">
+                          <div>
+                              <p class="text-amber-50 font-bold">ساعات عمل الشهر الحالي</p>
+                              <p id="statTotalTrainerHours" class="text-5xl font-black mt-2">0</p>
+                          </div>
+                          <button id="viewHoursStatsBtn" class="bg-white/20 hover:bg-white/30 px-5 py-3 rounded-xl font-bold">عرض</button>
+                      </div>
+                      <div class="mt-4 pt-3 border-t border-white/20 flex items-center justify-between gap-2">
+                          <label for="dashHoursMonthPicker" class="text-xs text-amber-100 font-bold">تغيير الشهر:</label>
+                          <input type="month" id="dashHoursMonthPicker" class="bg-white/20 text-white placeholder-white p-1.5 rounded-lg text-xs font-bold outline-none border border-white/30">
+                      </div>
+                  </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <button id="openAddTrainerBtn" class="bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 rounded-xl">➕ إضافة مدرب</button>
@@ -433,7 +445,7 @@ header{background:#fffaf0!important;}
     </div>
 
 
-    <div id="trainerStatsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50"><div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl"><div class="flex justify-between"><h3 id="trainerStatsTitle" class="text-xl font-black text-violet-700">إحصائيات المدربين</h3><button onclick="closeModal('trainerStatsModal')">✕</button></div><div class="flex gap-3 my-4"><select id="trainerStatsMode" class="p-3 border rounded-xl"><option value="day">حسب اليوم</option><option value="month">حسب الشهر</option></select><input id="trainerStatsDate" type="date" class="p-3 border rounded-xl flex-1"><input id="trainerStatsMonth" type="month" class="p-3 border rounded-xl flex-1 hidden"></div><div id="trainerStatsContent"></div></div></div>
+    <div id="trainerStatsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50"><div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl"><div class="flex justify-between"><h3 id="trainerStatsTitle" class="text-xl font-black text-violet-700">إحصائيات المدربين</h3><button onclick="closeModal('trainerStatsModal')">✕</button></div><div class="flex gap-3 my-4"><select id="trainerStatsMode" class="p-3 border rounded-xl"><option value="month">حسب الشهر</option><option value="day">حسب اليوم</option></select><input id="trainerStatsDate" type="date" class="p-3 border rounded-xl flex-1 hidden"><input id="trainerStatsMonth" type="month" class="p-3 border rounded-xl flex-1"></div><div id="trainerStatsContent"></div></div></div>
     <!-- 💰 نافذة إضافة/تعديل سلفة مدرب -->
     <div id="advanceModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-[60]">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
@@ -457,7 +469,7 @@ header{background:#fffaf0!important;}
     <!-- ⏱️ نافذة تسجيل ساعات العمل -->
     <div id="hoursModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50"><div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl"><div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-emerald-700">تسجيل ساعات العمل</h3><button onclick="closeModal('hoursModal')">✕</button></div><form id="hoursForm" class="space-y-3"><select id="hoursTrainer" required class="w-full p-3 border rounded-xl"><option value="">اختر المدرب</option></select><input type="date" id="hoursDate" required class="w-full p-3 border rounded-xl"><select id="hoursShift" required class="w-full p-3 border rounded-xl"><option value="">اختر الوردية</option><option value="1">1 - عدد ساعات العمل</option><option value="2">2 - عدد ساعات العمل</option></select><button class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl">حفظ ساعات العمل</button></form></div></div>
     <!-- 📋 ملف المدرب -->
-    <div id="trainerProfileModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50"><div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl"><div class="flex justify-between items-center border-b pb-3"><div><h3 id="trainerProfName" class="text-xl font-black"></h3><p id="trainerProfPhone" class="text-sm text-slate-500"></p><p id="trainerProfBranch" class="text-sm text-slate-500"></p></div><button onclick="closeModal('trainerProfileModal')">✕</button></div><div class="bg-violet-50 p-4 rounded-xl mt-4 text-center"><p class="text-sm text-slate-500">إجمالي ساعات العمل</p><p id="trainerTotalHours" class="text-3xl font-black text-violet-700">0 ساعة</p></div><div id="trainerHoursList" class="mt-4 max-h-64 overflow-y-auto space-y-2"></div><div class="grid grid-cols-2 gap-3 mt-5"><button id="editTrainerBtn" class="bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-xl font-bold">تعديل المدرب</button><button id="deleteTrainerBtn" class="bg-rose-600 hover:bg-rose-700 text-white py-3 rounded-xl font-bold">حذف المدرب</button></div></div></div>
+    <div id="trainerProfileModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50"><div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl"><div class="flex justify-between items-center border-b pb-3"><div><h3 id="trainerProfName" class="text-xl font-black"></h3><p id="trainerProfPhone" class="text-sm text-slate-500"></p><p id="trainerProfBranch" class="text-sm text-slate-500"></p></div><button onclick="closeModal('trainerProfileModal')">✕</button></div><div class="bg-violet-50 p-4 rounded-xl mt-4"><div class="flex justify-between items-center mb-2"><span class="text-sm text-slate-500 font-bold">ساعات العمل الشهرية</span><input type="month" id="trainerProfileMonthPicker" class="bg-white border text-xs p-1.5 rounded-lg outline-none font-bold"></div><p id="trainerTotalHours" class="text-3xl font-black text-violet-700 text-center">0 ساعة</p></div><div id="trainerHoursList" class="mt-4 max-h-64 overflow-y-auto space-y-2"></div><div class="grid grid-cols-2 gap-3 mt-5"><button id="editTrainerBtn" class="bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-xl font-bold">تعديل المدرب</button><button id="deleteTrainerBtn" class="bg-rose-600 hover:bg-rose-700 text-white py-3 rounded-xl font-bold">حذف المدرب</button></div></div></div>
 
     <script>
         // تسلسل شاشة البداية: تحميل ثم عرض الشعار ثم الدخول للنظام
@@ -994,16 +1006,32 @@ header{background:#fffaf0!important;}
 
 
         // ===== إدارة المدربين =====
+        async function loadTrainerHoursForMonth(monthStr) {
+            const hs = await getDocs(collection(db, TRAINER_HOURS_COLLECTION));
+            const monthHours = hs.docs
+                .map(d => d.data())
+                .filter(d => (d.date || '').startsWith(monthStr))
+                .reduce((sum, d) => sum + Number(d.hours || 0), 0);
+            document.getElementById('statTotalTrainerHours').innerText = monthHours;
+        }
+
         async function loadTrainers() {
             const snap=await getDocs(collection(db,TRAINERS_COLLECTION));
             allTrainers=snap.docs.map(d=>({id:d.id,...d.data()}));
-            const hs=await getDocs(collection(db,TRAINER_HOURS_COLLECTION));
-            const totalHours=hs.docs.reduce((sum,d)=>sum+Number(d.data().hours||0),0);
+            
+            const dashPicker = document.getElementById('dashHoursMonthPicker');
+            if (!dashPicker.value) dashPicker.value = getLocalMonthString();
+            await loadTrainerHoursForMonth(dashPicker.value);
+
             document.getElementById('statTrainers').innerText=allTrainers.length;
-            document.getElementById('statTotalTrainerHours').innerText=totalHours;
             renderTrainerSearch('');
             const sel=document.getElementById('hoursTrainer'); sel.innerHTML='<option value="">اختر المدرب</option>'+allTrainers.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
         }
+
+        document.getElementById('dashHoursMonthPicker').addEventListener('change', (e) => {
+            loadTrainerHoursForMonth(e.target.value);
+        });
+
         function renderTrainerSearch(q){const x=q.toLowerCase().trim();const rows=allTrainers.filter(t=>!x||t.name.toLowerCase().includes(x)||(t.phone||'').includes(x)||(t.branch||'').toLowerCase().includes(x));document.getElementById('trainerSearchResults').innerHTML=rows.length?rows.map(t=>`<div onclick="openTrainerProfile('${t.id}')" class="bg-white hover:bg-violet-50 cursor-pointer p-4 rounded-2xl border border-stone-200 transition"><p class="font-black text-violet-700">${t.name}</p><p class="text-sm text-stone-500">📱 ${t.phone} • ${t.branch}</p></div>`).join(''):'<p class="text-stone-400">لا توجد نتائج مطابقة</p>';}
         document.getElementById('trainerSearchInput').addEventListener('input',e=>renderTrainerSearch(e.target.value));
 
@@ -1073,10 +1101,90 @@ header{background:#fffaf0!important;}
         document.getElementById('hoursForm').addEventListener('submit', async e=>{e.preventDefault(); const t=allTrainers.find(x=>x.id===hoursTrainer.value); if(!t)return; await addDoc(collection(db,TRAINER_HOURS_COLLECTION),{trainerId:t.id,trainerName:t.name,date:hoursDate.value,shift:hoursShift.value,hours:parseFloat(hoursShift.value),createdAt:new Date()}); closeModal('hoursModal'); e.target.reset(); alert('تم تسجيل ساعات العمل بنجاح'); loadTrainers();});
         document.getElementById('revenueDayPicker').addEventListener('change',e=>{if(e.target.value){document.getElementById('revenueMonthPicker').value='';renderRevenueList(e.target.value);}});
         const oldRenderRevenueList=renderRevenueList; renderRevenueList=async function(period){const c=document.getElementById('revenueListContainer');const filtered=allSubscribers.filter(x=>x.startDate&&x.startDate.startsWith(period));const total=filtered.reduce((a,x)=>a+Number(x.price||0),0);const advSnap=await getDocs(collection(db,TRAINER_ADVANCES_COLLECTION));const advances=advSnap.docs.map(d=>({id:d.id,...d.data()})).filter(a=>(a.date||'').startsWith(period));const advanceTotal=advances.reduce((a,x)=>a+Number(x.amount||0),0);const net=total-advanceTotal;document.getElementById('revenueSelectedTotal').innerHTML='إجمالي الإيرادات: '+total.toLocaleString()+' ر.س <span class="mx-2 text-orange-600">| السلف: '+advanceTotal.toLocaleString()+' ر.س</span><span class="text-violet-700">| الصافي بعد السلف: '+net.toLocaleString()+' ر.س</span>';c.innerHTML=(filtered.length?filtered.map(x=>`<div class="bg-white p-3 rounded-xl border flex justify-between"><span>${x.name} - ${x.startDate}</span><b>${x.price} ر.س</b></div>`).join(''):'<p class="text-center text-slate-400 py-4">لا توجد إيرادات لهذه الفترة</p>')+(advances.length?'<div class="mt-4 pt-3 border-t font-bold text-orange-600">السلف المخصومة من هذه الفترة</div>'+advances.map(a=>`<div class="bg-orange-50 p-3 rounded-xl border border-orange-200 flex justify-between"><span>${a.trainerName} - ${a.date}</span><b>${Number(a.amount||0).toLocaleString()} ر.س</b></div>`).join(''):'');};
-        function openTrainerStats(type){document.getElementById('trainerStatsTitle').innerText=type==='trainers'?'عدد المدربين':'إجمالي ساعات العمل';document.getElementById('trainerStatsModal').dataset.type=type;document.getElementById('trainerStatsDate').value=getLocalDateString();document.getElementById('trainerStatsMonth').value=getLocalMonthString();document.getElementById('trainerStatsModal').classList.remove('hidden');renderTrainerStats();}
-        async function renderTrainerStats(){const mode=document.getElementById('trainerStatsMode').value;const key=mode==='day'?document.getElementById('trainerStatsDate').value:document.getElementById('trainerStatsMonth').value;document.getElementById('trainerStatsDate').classList.toggle('hidden',mode!=='day');document.getElementById('trainerStatsMonth').classList.toggle('hidden',mode!=='month');const hs=await getDocs(collection(db,TRAINER_HOURS_COLLECTION));const rows=hs.docs.map(d=>d.data()).filter(x=>(x.date||'').startsWith(key));const type=document.getElementById('trainerStatsModal').dataset.type;const content=document.getElementById('trainerStatsContent');if(type==='hours'){content.innerHTML='<div class="text-4xl font-black text-amber-600 text-center p-6">'+rows.reduce((a,x)=>a+Number(x.hours||0),0)+' ساعة</div>';}else{const ids=[...new Set(rows.map(x=>x.trainerId))];content.innerHTML='<div class="text-4xl font-black text-violet-700 text-center p-6">'+ids.length+' مدرب عمل في الفترة المختارة</div>';}}
-        document.getElementById('viewTrainersStatsBtn').onclick=()=>openTrainerStats('trainers');document.getElementById('viewHoursStatsBtn').onclick=()=>openTrainerStats('hours');document.getElementById('trainerStatsMode').addEventListener('change',renderTrainerStats);document.getElementById('trainerStatsDate').addEventListener('change',renderTrainerStats);document.getElementById('trainerStatsMonth').addEventListener('change',renderTrainerStats);
-        window.openTrainerProfile=async id=>{const t=allTrainers.find(x=>x.id===id); if(!t)return; trainerProfName.innerText=t.name;trainerProfPhone.innerText='📱 '+t.phone;trainerProfBranch.innerText='الفرع: '+t.branch; const snap=await getDocs(collection(db,TRAINER_HOURS_COLLECTION)); const rows=snap.docs.map(d=>d.data()).filter(x=>x.trainerId===id).sort((a,b)=>b.date.localeCompare(a.date)); const total=rows.reduce((a,x)=>a+Number(x.hours||0),0);trainerTotalHours.innerText=total+' ساعة';trainerHoursList.innerHTML=rows.length?rows.map(x=>`<div class="p-3 bg-slate-50 rounded-xl border flex justify-between"><span>${x.date} • ${x.shift}</span><b>${x.hours} ساعة</b></div>`).join(''):'<p class="text-slate-400 text-center">لا توجد ساعات مسجلة</p>';document.getElementById('editTrainerBtn').onclick=async()=>{const name=prompt('اسم المدرب',t.name);if(name===null)return;const phone=prompt('رقم الهاتف',t.phone);if(phone===null)return;const branch=prompt('الفرع',t.branch);if(branch===null)return;await updateDoc(doc(db,TRAINERS_COLLECTION,id),{name,phone,branch});closeModal('trainerProfileModal');loadTrainers();};document.getElementById('deleteTrainerBtn').onclick=async()=>{if(!confirm('هل تريد حذف المدرب؟'))return;await deleteDoc(doc(db,TRAINERS_COLLECTION,id));const allHours=await getDocs(collection(db,TRAINER_HOURS_COLLECTION));await Promise.all(allHours.docs.filter(d=>d.data().trainerId===id).map(d=>deleteDoc(d.ref)));closeModal('trainerProfileModal');loadTrainers();};document.getElementById('trainerProfileModal').classList.remove('hidden');};
+        
+        function openTrainerStats(type){
+            document.getElementById('trainerStatsTitle').innerText=type==='trainers'?'عدد المدربين':'ساعات العمل الشهري';
+            document.getElementById('trainerStatsModal').dataset.type=type;
+            document.getElementById('trainerStatsMode').value='month';
+            document.getElementById('trainerStatsDate').value=getLocalDateString();
+            document.getElementById('trainerStatsMonth').value=getLocalMonthString();
+            document.getElementById('trainerStatsModal').classList.remove('hidden');
+            renderTrainerStats();
+        }
+
+        async function renderTrainerStats(){
+            const mode=document.getElementById('trainerStatsMode').value;
+            const key=mode==='day'?document.getElementById('trainerStatsDate').value:document.getElementById('trainerStatsMonth').value;
+            document.getElementById('trainerStatsDate').classList.toggle('hidden',mode!=='day');
+            document.getElementById('trainerStatsMonth').classList.toggle('hidden',mode!=='month');
+            const hs=await getDocs(collection(db,TRAINER_HOURS_COLLECTION));
+            const rows=hs.docs.map(d=>d.data()).filter(x=>(x.date||'').startsWith(key));
+            const type=document.getElementById('trainerStatsModal').dataset.type;
+            const content=document.getElementById('trainerStatsContent');
+            if(type==='hours'){
+                const totalMonthHours = rows.reduce((a,x)=>a+Number(x.hours||0),0);
+                content.innerHTML='<div class="text-center p-6"><p class="text-sm text-slate-500 font-bold mb-1">إجمالي الساعات للشهر المحدد</p><div class="text-5xl font-black text-amber-600">'+totalMonthHours+' ساعة</div></div>';
+            }else{
+                const ids=[...new Set(rows.map(x=>x.trainerId))];
+                content.innerHTML='<div class="text-4xl font-black text-violet-700 text-center p-6">'+ids.length+' مدرب عمل في الفترة المختارة</div>';
+            }
+        }
+
+        document.getElementById('viewTrainersStatsBtn').onclick=()=>openTrainerStats('trainers');
+        document.getElementById('viewHoursStatsBtn').onclick=()=>openTrainerStats('hours');
+        document.getElementById('trainerStatsMode').addEventListener('change',renderTrainerStats);
+        document.getElementById('trainerStatsDate').addEventListener('change',renderTrainerStats);
+        document.getElementById('trainerStatsMonth').addEventListener('change',renderTrainerStats);
+
+        async function renderTrainerProfileHours(trainerId, monthStr) {
+            const snap = await getDocs(collection(db, TRAINER_HOURS_COLLECTION));
+            const allHours = snap.docs.map(d => d.data()).filter(x => x.trainerId === trainerId);
+            const filtered = allHours.filter(x => (x.date || '').startsWith(monthStr)).sort((a,b) => b.date.localeCompare(a.date));
+            const total = filtered.reduce((a,x) => a + Number(x.hours || 0), 0);
+            
+            document.getElementById('trainerTotalHours').innerText = total + ' ساعة';
+            document.getElementById('trainerHoursList').innerHTML = filtered.length ? 
+                filtered.map(x => `<div class="p-3 bg-slate-50 rounded-xl border flex justify-between"><span>${x.date} • وردية ${x.shift}</span><b>${x.hours} ساعة</b></div>`).join('') : 
+                '<p class="text-slate-400 text-center py-4">لا توجد ساعات مسجلة لهذا الشهر</p>';
+        }
+
+        window.openTrainerProfile = async id => {
+            const t = allTrainers.find(x => x.id === id); 
+            if(!t) return; 
+            trainerProfName.innerText = t.name;
+            trainerProfPhone.innerText = '📱 ' + t.phone;
+            trainerProfBranch.innerText = 'الفرع: ' + t.branch; 
+            
+            const monthPicker = document.getElementById('trainerProfileMonthPicker');
+            monthPicker.value = getLocalMonthString();
+            
+            await renderTrainerProfileHours(id, monthPicker.value);
+
+            monthPicker.onchange = (e) => renderTrainerProfileHours(id, e.target.value);
+
+            document.getElementById('editTrainerBtn').onclick = async () => {
+                const name = prompt('اسم المدرب', t.name);
+                if(name === null) return;
+                const phone = prompt('رقم الهاتف', t.phone);
+                if(phone === null) return;
+                const branch = prompt('الفرع', t.branch);
+                if(branch === null) return;
+                await updateDoc(doc(db, TRAINERS_COLLECTION, id), {name, phone, branch});
+                closeModal('trainerProfileModal');
+                loadTrainers();
+            };
+
+            document.getElementById('deleteTrainerBtn').onclick = async () => {
+                if(!confirm('هل تريد حذف المدرب؟')) return;
+                await deleteDoc(doc(db, TRAINERS_COLLECTION, id));
+                const allHours = await getDocs(collection(db, TRAINER_HOURS_COLLECTION));
+                await Promise.all(allHours.docs.filter(d => d.data().trainerId === id).map(d => deleteDoc(d.ref)));
+                closeModal('trainerProfileModal');
+                loadTrainers();
+            };
+
+            document.getElementById('trainerProfileModal').classList.remove('hidden');
+        };
 
         // تحديث قسم المدربين بعد تسجيل الدخول مع استمرار المزامنة الفورية للمشتركين.
         const originalLoadSubscribers = loadSubscribers;
